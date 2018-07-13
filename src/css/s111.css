@@ -1,0 +1,22 @@
+#basemap {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+#label {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+
+  text-shadow:1px 1px 4px rgba(0,0,0,1);
+  font-weight:bold;
+  font-variant:small-caps;
+  color:#FFFFFF;
+  letter-spacing:1pt;
+  word-spacing:0pt;
+  font-size:1.5em;
+  text-align:left;
+  font-family:helvetica, sans-serif;
+  line-height:1;
+}
