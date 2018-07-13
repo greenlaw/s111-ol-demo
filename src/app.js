@@ -60,9 +60,6 @@ export default class {
     this.map.addLayer(this.layer_rnc);
   }
 
-  /**
-   * NOT WORKING - DISPLAY PROBLEM
-   */
   initENC() {
     const source_enc = new ArcGISRestImageSource({
       url: "https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/Maritime%20Chart%20Server/MapServer",
