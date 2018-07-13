@@ -4,6 +4,12 @@
   right: 20px;
 }
 
+#ofs {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+}
+
 #label {
   position: absolute;
   top: 10px;

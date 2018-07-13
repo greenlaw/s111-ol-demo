@@ -12,9 +12,81 @@ import OSMSource from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import XYZSource from 'ol/source/XYZ';
 
+const S111_MODELS = {
+  'cbofs': {
+    'label': 'Chesapeake Bay',
+    'center': [-76.087, 37.6],
+    'zoom': 9,
+    'source': new ImageWMSSource({
+      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      params: {
+        'layers': 's100ofs_Geo:cbofs',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date("2018-07-13T13:00:00.000Z"),
+    'end_time': new Date("2018-07-15T12:00:00.000Z"),
+    'time_step': 1 *60*60*1000 // 1 hour
+  },
+  'dbofs': {
+    'label': 'Delaware Bay',
+    'center': [-74.574, 38.75],
+    'zoom': 10,
+    'source': new ImageWMSSource({
+      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      params: {
+        'layers': 's100ofs_Geo:dbofs',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date("2018-07-13T13:00:00.000Z"),
+    'end_time': new Date("2018-07-15T12:00:00.000Z"),
+    'time_step': 1 *60*60*1000 // 1 hour
+  },
+  'gomofs': {
+    'label': 'Gulf of Maine',
+    'center': [-66.751, 42.019],
+    'zoom': 8,
+    'source': new ImageWMSSource({
+      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      params: {
+        'layers': 's100ofs_Geo:gomofs',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date("2018-07-13T15:00:00.000Z"),
+    'end_time': new Date("2018-07-16T12:00:00.000Z"),
+    'time_step': 3 *60*60*1000 // 1 hour
+  },
+  'tbofs': {
+    'label': 'Tampa Bay',
+    'center': [-82.773, 27.557],
+    'zoom': 10,
+    'source': new ImageWMSSource({
+      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      params: {
+        'layers': 's100ofs_Geo:tbofs',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date("2018-07-11T13:00:00.000Z"),
+    'end_time': new Date("2018-07-13T12:00:00.000Z"),
+    'time_step': 1 *60*60*1000 // 1 hour
+  }
+}
+
 export default class {
   constructor() {
     this.initMap();
+    this.initLabels();
     this.initBasemapControl();
     this.initENC();
     this.initS111();
@@ -36,7 +108,7 @@ export default class {
     })
 
     this.basemapLayer = new TileLayer({
-      source: this.basemapSourceStamen
+      source: this.basemapSourceESRISatellite
     });
 
     this.map = new Map({
@@ -45,8 +117,8 @@ export default class {
         this.basemapLayer
       ],
       view: new View({
-        center: fromLonLat([-82.773, 27.557]),
-        zoom: 10
+        //center: fromLonLat([-82.773, 27.557]),
+        //zoom: 10
       })
     });
   }
@@ -94,15 +166,15 @@ export default class {
     this.basemapControl = document.createElement('select');
     this.basemapControl.setAttribute('id', 'basemap');
     const basemaps = {
-      'stamen': {
+      'esri-sat': {
+        'label': 'ESRI Satellite Imagery',
+        'source': this.basemapSourceESRISatellite
+      }, 'stamen': {
         'label': 'Stamen',
         'source': this.basemapSourceStamen
       }, 'osm': {
         'label': 'OpenStreetMap',
         'source': this.basemapSourceOSM
-      }, 'esri-sat': {
-        'label': 'ESRI Satellite Imagery',
-        'source': this.basemapSourceESRISatellite
       }, 'esri-topo': {
         'label': 'ESRI Topographic',
         'source': this.basemapSourceESRITopo
@@ -123,41 +195,77 @@ export default class {
     document.getElementById('map-container').appendChild(this.basemapControl);
   }
 
-  initS111() {
-    const startTime = new Date("2018-07-11T13:00:00.000Z");
-    const endTime = new Date("2018-07-13T12:00:00.000Z");
-    const timeStep = 1 *60*60*1000; // 1 hour
-    let timeval = startTime;
-    this.layer_s111 = new ImageLayer({
-      source: new ImageWMSSource({
-        url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
-        params: {
-          'layers': 's100ofs_Geo:s100ofs',
-          'format': 'image/png8',
-          'transparent': 'true',
-          'time': timeval
-        },
-        ratio: 1
-      })
-    });
-    this.map.addLayer(this.layer_s111);
+  updateTimeLabel(timeval) {
+    this.time_label_text.nodeValue = `Valid Time: ${timeval.toGMTString()}`;
+  }
 
-    const label = document.createElement('div');
-    label.setAttribute("id", "label");
-    const labelText = document.createTextNode(`Valid Time: ${timeval.toGMTString()}`);
-    label.appendChild(labelText);
-    document.getElementById('map-container').appendChild(label);
+  updateOFS(ofs_id) {
+    if (!(ofs_id in S111_MODELS)) {
+      console.error("Model does not exist:", ofs_id);
+      return;
+    }
 
-    setInterval(() => {
-      if (timeval >= endTime) {
-        timeval = startTime;
+    if (this.animation_interval) {
+      clearInterval(this.animation_interval);
+      this.animation_interval = null;
+    }
+
+    const ofs = S111_MODELS[ofs_id];
+
+    let timeval = ofs.start_time;
+    const params = ofs.source.getParams();
+    params.time = timeval.toISOString();
+    this.updateTimeLabel(timeval);
+    ofs.source.updateParams(params);
+
+    if (!this.layer_s111) {
+      this.layer_s111 = new ImageLayer({
+        source: ofs.source
+      });
+      this.map.addLayer(this.layer_s111);
+    } else {
+      this.layer_s111.setSource(S111_MODELS[ofs_id].source);
+    }
+
+    this.map.getView().setCenter(fromLonLat(ofs.center));
+    this.map.getView().setZoom(ofs.zoom);
+
+    this.animation_interval = setInterval(() => {
+      if (timeval >= ofs.end_time) {
+        timeval = ofs.start_time;
       } else {
-        timeval = new Date(timeval.getTime() + timeStep);
+        timeval = new Date(timeval.getTime() + ofs.time_step);
       }
-      const params = this.layer_s111.getSource().getParams();
+      const params = ofs.source.getParams();
       params.time = timeval.toISOString();
-      this.layer_s111.getSource().updateParams(params);
-      labelText.nodeValue = `Valid Time: ${timeval.toGMTString()}`;
+      ofs.source.updateParams(params);
+      this.updateTimeLabel(timeval);
     }, 2000);
+  }
+
+  initLabels() {
+    this.time_label = document.createElement('div');
+    this.time_label.setAttribute("id", "label");
+    this.time_label_text = document.createTextNode("");
+    this.time_label.appendChild(this.time_label_text);
+    document.getElementById('map-container').appendChild(this.time_label);
+  }
+
+  initS111() {
+    this.ofsControl = document.createElement('select');
+    this.ofsControl.setAttribute('id', 'ofs');
+    Object.entries(S111_MODELS).forEach(([id, ofs]) => {
+      let option = document.createElement('option');
+      option.setAttribute('value', id);
+      //option.setAttribute('selected', 'selected');
+      option.appendChild(document.createTextNode(ofs.label));
+      this.ofsControl.appendChild(option);
+    });
+    this.ofsControl.addEventListener('change', (evt) => {
+      this.updateOFS(evt.target.value);
+    });
+    this.updateOFS(this.ofsControl.options[this.ofsControl.selectedIndex].value);
+
+    document.getElementById('map-container').appendChild(this.ofsControl);
   }
 }
