@@ -1,7 +1,7 @@
 import 'ol/ol.css';
 import './css/s111.css';
 
-import { fromLonLat } from 'ol/proj';
+import {fromLonLat} from 'ol/proj';
 import ArcGISRestImageSource from 'ol/source/ImageArcGISRest';
 import ArcGISRestTileSource from 'ol/source/TileArcGISRest';
 import Map from 'ol/Map';
@@ -26,9 +26,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-13T13:00:00.000Z"),
-    'end_time': new Date("2018-07-15T12:00:00.000Z"),
-    'time_step': 1 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-13T13:00:00.000Z'),
+    'end_time': new Date('2018-07-15T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'dbofs': {
     'label': 'Delaware Bay',
@@ -43,9 +43,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-13T13:00:00.000Z"),
-    'end_time': new Date("2018-07-15T12:00:00.000Z"),
-    'time_step': 1 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-13T13:00:00.000Z'),
+    'end_time': new Date('2018-07-15T12:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
   },
   'gomofs': {
     'label': 'Gulf of Maine',
@@ -60,9 +60,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-13T15:00:00.000Z"),
-    'end_time': new Date("2018-07-16T12:00:00.000Z"),
-    'time_step': 3 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-13T15:00:00.000Z'),
+    'end_time': new Date('2018-07-16T12:00:00.000Z'),
+    'time_step': 3 * 60 * 60 * 1000 // 1 hour
   },
   'tbofs': {
     'label': 'Tampa Bay',
@@ -77,11 +77,11 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-11T13:00:00.000Z"),
-    'end_time': new Date("2018-07-13T12:00:00.000Z"),
-    'time_step': 1 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-11T13:00:00.000Z'),
+    'end_time': new Date('2018-07-13T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   }
-}
+};
 
 export default class {
   constructor() {
@@ -100,12 +100,12 @@ export default class {
     this.basemapSourceOSM = new OSMSource();
 
     this.basemapSourceESRISatellite = new ArcGISRestTileSource({
-      url: "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer"
+      url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
     });
 
     this.basemapSourceESRITopo = new ArcGISRestTileSource({
-      url: "http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer"
-    })
+      url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer'
+    });
 
     this.basemapLayer = new TileLayer({
       source: this.basemapSourceESRISatellite
@@ -134,11 +134,11 @@ export default class {
 
   initENC() {
     const source_enc = new ArcGISRestImageSource({
-      url: "https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/Maritime%20Chart%20Server/MapServer",
+      url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/Maritime%20Chart%20Server/MapServer',
       params: {
         'layers': 'show:0,2,3,4,5,6,7',
         'format': 'png8',
-        'bboxsr': `{"wkid":3857}`,
+        'bboxsr': '{"wkid":3857}',
         'display_params':`{"ECDISParameters":{"version":"1.0","StaticParameters":{"Parameter":[{"name":"AreaSymbolizationType","value":2},{"name":"PointSymbolizationType","value":2}]},"DynamicParameters":{"Parameter":[{"name":"ColorScheme","value":3},{"name":"DisplayDepthUnits","value":1},{"name":"TwoDepthShades","value":1},{"name":"DisplayNOBJNM","value":1},{"name":"HonorScamin","value":2},{"name":"ShallowDepthPattern","value":1},{"name":"ShallowContour","value":2},{"name":"SafetyContour","value":10},{"name":"DeepContour","value":30},{"name":"DisplayCategory","value":"1,2,4"}]}}}`
       }
     });
@@ -146,14 +146,14 @@ export default class {
     const oldfunc = source_enc.getRequestUrl_;
     source_enc.getRequestUrl_ = function(extent, size, pixelRatio, projection, params) {
       return oldfunc.apply(this, arguments)
-        .replace('BBOX=','bbox=')
-        .replace('BBOXSR=','bboxsr=')
-        .replace('F=','f=')
-        .replace('FORMAT=','format=')
-        .replace('TRANSPARENT=','transparent=')
-        .replace('SIZE=','size=')
-        .replace('IMAGESR=','imagesr=')
-        .replace('DPI=','dpi=');
+        .replace('BBOX=', 'bbox=')
+        .replace('BBOXSR=', 'bboxsr=')
+        .replace('F=', 'f=')
+        .replace('FORMAT=', 'format=')
+        .replace('TRANSPARENT=', 'transparent=')
+        .replace('SIZE=', 'size=')
+        .replace('IMAGESR=', 'imagesr=')
+        .replace('DPI=', 'dpi=');
     };
 
     this.layer_enc = new ImageLayer({
@@ -181,7 +181,7 @@ export default class {
       }
     };
     Object.entries(basemaps).forEach(([id, bm]) => {
-      let option = document.createElement('option');
+      const option = document.createElement('option');
       option.setAttribute('value', id);
       //option.setAttribute('selected', 'selected');
       option.appendChild(document.createTextNode(bm.label));
@@ -201,7 +201,7 @@ export default class {
 
   updateOFS(ofs_id) {
     if (!(ofs_id in S111_MODELS)) {
-      console.error("Model does not exist:", ofs_id);
+      console.error('Model does not exist:', ofs_id);
       return;
     }
 
@@ -245,8 +245,8 @@ export default class {
 
   initLabels() {
     this.time_label = document.createElement('div');
-    this.time_label.setAttribute("id", "label");
-    this.time_label_text = document.createTextNode("");
+    this.time_label.setAttribute('id', 'label');
+    this.time_label_text = document.createTextNode('');
     this.time_label.appendChild(this.time_label_text);
     document.getElementById('map-container').appendChild(this.time_label);
   }
@@ -255,7 +255,7 @@ export default class {
     this.ofsControl = document.createElement('select');
     this.ofsControl.setAttribute('id', 'ofs');
     Object.entries(S111_MODELS).forEach(([id, ofs]) => {
-      let option = document.createElement('option');
+      const option = document.createElement('option');
       option.setAttribute('value', id);
       //option.setAttribute('selected', 'selected');
       option.appendChild(document.createTextNode(ofs.label));
