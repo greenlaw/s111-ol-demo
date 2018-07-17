@@ -1,7 +1,8 @@
 import 'ol/ol.css';
 import './css/s111.css';
 
-import { fromLonLat } from 'ol/proj';
+import {defaults as defaultControls, ScaleLine} from 'ol/control.js';
+import {fromLonLat, METERS_PER_UNIT} from 'ol/proj';
 import ArcGISRestImageSource from 'ol/source/ImageArcGISRest';
 import ArcGISRestTileSource from 'ol/source/TileArcGISRest';
 import Map from 'ol/Map';
@@ -26,9 +27,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-13T13:00:00.000Z"),
-    'end_time': new Date("2018-07-15T12:00:00.000Z"),
-    'time_step': 1 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-13T13:00:00.000Z'),
+    'end_time': new Date('2018-07-15T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'dbofs': {
     'label': 'Delaware Bay',
@@ -43,9 +44,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-13T13:00:00.000Z"),
-    'end_time': new Date("2018-07-15T12:00:00.000Z"),
-    'time_step': 1 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-13T13:00:00.000Z'),
+    'end_time': new Date('2018-07-15T12:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
   },
   'gomofs': {
     'label': 'Gulf of Maine',
@@ -60,9 +61,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-13T15:00:00.000Z"),
-    'end_time': new Date("2018-07-16T12:00:00.000Z"),
-    'time_step': 3 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-13T15:00:00.000Z'),
+    'end_time': new Date('2018-07-16T12:00:00.000Z'),
+    'time_step': 3 * 60 * 60 * 1000 // 1 hour
   },
   'tbofs': {
     'label': 'Tampa Bay',
@@ -77,11 +78,11 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date("2018-07-11T13:00:00.000Z"),
-    'end_time': new Date("2018-07-13T12:00:00.000Z"),
-    'time_step': 1 *60*60*1000 // 1 hour
+    'start_time': new Date('2018-07-11T13:00:00.000Z'),
+    'end_time': new Date('2018-07-13T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   }
-}
+};
 
 export default class {
   constructor() {
@@ -100,18 +101,28 @@ export default class {
     this.basemapSourceOSM = new OSMSource();
 
     this.basemapSourceESRISatellite = new ArcGISRestTileSource({
-      url: "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer"
+      url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
     });
 
     this.basemapSourceESRITopo = new ArcGISRestTileSource({
-      url: "http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer"
-    })
+      url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer'
+    });
 
     this.basemapLayer = new TileLayer({
       source: this.basemapSourceESRISatellite
     });
 
+    this.scaleLine = new ScaleLine();
+    this.scaleLine.setUnits('us');
+
     this.map = new Map({
+      controls: defaultControls({
+        attributionOptions: {
+          collapsible: false
+        }})
+        .extend([
+          this.scaleLine
+        ]),
       target: 'map-container',
       layers: [
         this.basemapLayer
@@ -134,7 +145,7 @@ export default class {
 
   initENC() {
     const source_enc = new ArcGISRestImageSource({
-      url: "https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/Maritime%20Chart%20Server/MapServer",
+      url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/Maritime%20Chart%20Server/MapServer',
       params: {
         'layers': 'show:0,2,3,4,5,6,7',
         'format': 'png8',
@@ -146,14 +157,14 @@ export default class {
     const oldfunc = source_enc.getRequestUrl_;
     source_enc.getRequestUrl_ = function(extent, size, pixelRatio, projection, params) {
       return oldfunc.apply(this, arguments)
-        .replace('BBOX=','bbox=')
-        .replace('BBOXSR=','bboxsr=')
-        .replace('F=','f=')
-        .replace('FORMAT=','format=')
-        .replace('TRANSPARENT=','transparent=')
-        .replace('SIZE=','size=')
-        .replace('IMAGESR=','imagesr=')
-        .replace('DPI=','dpi=');
+        .replace('BBOX=', 'bbox=')
+        .replace('BBOXSR=', 'bboxsr=')
+        .replace('F=', 'f=')
+        .replace('FORMAT=', 'format=')
+        .replace('TRANSPARENT=', 'transparent=')
+        .replace('SIZE=', 'size=')
+        .replace('IMAGESR=', 'imagesr=')
+        .replace('DPI=', 'dpi=');
     };
 
     this.layer_enc = new ImageLayer({
@@ -181,7 +192,7 @@ export default class {
       }
     };
     Object.entries(basemaps).forEach(([id, bm]) => {
-      let option = document.createElement('option');
+      const option = document.createElement('option');
       option.setAttribute('value', id);
       //option.setAttribute('selected', 'selected');
       option.appendChild(document.createTextNode(bm.label));
@@ -193,6 +204,10 @@ export default class {
     });
 
     document.getElementById('map-container').appendChild(this.basemapControl);
+  }
+
+  updateScaleLabel(scale) {
+    this.scale_label_text.nodeValue = `Map Scale = 1 : ${scale}`;
   }
 
   updateTimeLabel(timeval) {
@@ -245,17 +260,32 @@ export default class {
 
   initLabels() {
     this.time_label = document.createElement('div');
-    this.time_label.setAttribute("id", "label");
-    this.time_label_text = document.createTextNode("");
+    this.time_label.setAttribute('id', 'time_label');
+    this.time_label_text = document.createTextNode('');
     this.time_label.appendChild(this.time_label_text);
     document.getElementById('map-container').appendChild(this.time_label);
+
+    this.scale_label = document.createElement('div');
+    this.scale_label.setAttribute('id', 'scale_label');
+    this.scale_label_text = document.createTextNode('');
+    this.scale_label.appendChild(this.scale_label_text);
+    document.getElementById('map-container').appendChild(this.scale_label);
+
+    this.map.getView().on('change:resolution', (evt) => {
+      const resolution = evt.target.get('resolution');
+      const units = this.map.getView().getProjection().getUnits();
+      const dpi = 96;//25.4 / 0.28;
+      const mpu = METERS_PER_UNIT[units];
+      const scale = Math.round(resolution * mpu * 39.37 * dpi);
+      this.updateScaleLabel(scale);
+    });
   }
 
   initS111() {
     this.ofsControl = document.createElement('select');
     this.ofsControl.setAttribute('id', 'ofs');
     Object.entries(S111_MODELS).forEach(([id, ofs]) => {
-      let option = document.createElement('option');
+      const option = document.createElement('option');
       option.setAttribute('value', id);
       //option.setAttribute('selected', 'selected');
       option.appendChild(document.createTextNode(ofs.label));
