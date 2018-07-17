@@ -149,7 +149,7 @@ export default class {
       params: {
         'layers': 'show:0,2,3,4,5,6,7',
         'format': 'png8',
-        'bboxsr': `{"wkid":3857}`,
+        'bboxsr': '{"wkid":3857}',
         'display_params':`{"ECDISParameters":{"version":"1.0","StaticParameters":{"Parameter":[{"name":"AreaSymbolizationType","value":2},{"name":"PointSymbolizationType","value":2}]},"DynamicParameters":{"Parameter":[{"name":"ColorScheme","value":3},{"name":"DisplayDepthUnits","value":1},{"name":"TwoDepthShades","value":1},{"name":"DisplayNOBJNM","value":1},{"name":"HonorScamin","value":2},{"name":"ShallowDepthPattern","value":1},{"name":"ShallowContour","value":2},{"name":"SafetyContour","value":10},{"name":"DeepContour","value":30},{"name":"DisplayCategory","value":"1,2,4"}]}}}`
       }
     });
@@ -216,7 +216,7 @@ export default class {
 
   updateOFS(ofs_id) {
     if (!(ofs_id in S111_MODELS)) {
-      console.error("Model does not exist:", ofs_id);
+      console.error('Model does not exist:', ofs_id);
       return;
     }
 
