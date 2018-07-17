@@ -1,3 +1,3 @@
-import app from "./app"
+import app from "./app";
 
-window.app = new app()
+window.app = new app();
