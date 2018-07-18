@@ -1,5 +1,6 @@
 import 'ol/ol.css';
 import './css/s111.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 import {defaults as defaultControls, ScaleLine} from 'ol/control.js';
 import {fromLonLat, METERS_PER_UNIT} from 'ol/proj';
@@ -141,6 +142,7 @@ export default class {
     this.initBasemapControl();
     this.initS111();
     this.initENC();
+    this.initAnimationControl();
 
     // Trigger layer update
     this.updateOFS(this.ofsControl.options[this.ofsControl.selectedIndex].value);
@@ -245,6 +247,37 @@ export default class {
     this.menu_inner.appendChild(this.basemapControlElem);
   }
 
+  initAnimationControl() {
+    this.playPauseButtonContainer = document.createElement('div');
+    this.playPauseButtonContainer.className = 'animation-playpause';
+    this.playPauseButton = document.createElement('i');
+    this.playPauseButton.className = 'fa fa-2x fa-play';
+    this.playPauseButtonContainer.appendChild(this.playPauseButton);
+
+    this.playing = false;
+
+    const togglePlay = () => {
+      this.playing = !this.playing;
+      if (this.animation_interval) {
+        clearInterval(this.animation_interval);
+      }
+      if (this.playing) {
+        this.playPauseButton.className = 'fa fa-2x fa-pause';
+        this.animation_interval = setInterval(() => {
+          this.ofs_play();
+        }, 2000);
+      } else {
+        this.playPauseButton.className = 'fa fa-2x fa-play';
+      }
+    };
+
+    this.playPauseButtonContainer.addEventListener('click', (evt) => {
+      togglePlay();
+    });
+
+    document.getElementById('map-container').appendChild(this.playPauseButtonContainer);
+  }
+
   updateScaleLabel(scale) {
     this.scale_label_text.nodeValue = `Map Scale = 1 : ${scale}`;
   }
@@ -284,17 +317,17 @@ export default class {
     this.map.getView().setCenter(fromLonLat(ofs.center));
     this.map.getView().setZoom(ofs.zoom);
 
-    // this.animation_interval = setInterval(() => {
-    //   if (timeval >= ofs.end_time) {
-    //     timeval = ofs.start_time;
-    //   } else {
-    //     timeval = new Date(timeval.getTime() + ofs.time_step);
-    //   }
-    //   const params = ofs.source.getParams();
-    //   params.time = timeval.toISOString();
-    //   ofs.source.updateParams(params);
-    //   this.updateTimeLabel(timeval);
-    // }, 2000);
+    this.ofs_play = () => {
+      if (timeval >= ofs.end_time) {
+        timeval = ofs.start_time;
+      } else {
+        timeval = new Date(timeval.getTime() + ofs.time_step);
+      }
+      const params = ofs.source.getParams();
+      params.time = timeval.toISOString();
+      ofs.source.updateParams(params);
+      this.updateTimeLabel(timeval);
+    };
   }
 
   initLabels() {
