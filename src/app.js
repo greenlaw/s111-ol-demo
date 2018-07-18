@@ -245,17 +245,17 @@ export default class {
     this.map.getView().setCenter(fromLonLat(ofs.center));
     this.map.getView().setZoom(ofs.zoom);
 
-    this.animation_interval = setInterval(() => {
-      if (timeval >= ofs.end_time) {
-        timeval = ofs.start_time;
-      } else {
-        timeval = new Date(timeval.getTime() + ofs.time_step);
-      }
-      const params = ofs.source.getParams();
-      params.time = timeval.toISOString();
-      ofs.source.updateParams(params);
-      this.updateTimeLabel(timeval);
-    }, 2000);
+    // this.animation_interval = setInterval(() => {
+    //   if (timeval >= ofs.end_time) {
+    //     timeval = ofs.start_time;
+    //   } else {
+    //     timeval = new Date(timeval.getTime() + ofs.time_step);
+    //   }
+    //   const params = ofs.source.getParams();
+    //   params.time = timeval.toISOString();
+    //   ofs.source.updateParams(params);
+    //   this.updateTimeLabel(timeval);
+    // }, 2000);
   }
 
   initLabels() {

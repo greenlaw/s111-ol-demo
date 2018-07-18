@@ -11,24 +11,18 @@
   },
   "main": "src/main.js",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "parcel build --public-url . index.html",
     "lint": "eslint .",
-    "start": "webpack-dev-server --mode=development",
+    "start": "parcel index.html",
     "test": "npm run lint"
   },
   "dependencies": {
-    "ol": "^5.1.0-beta.1"
+    "ol": "^5.0.3"
   },
   "devDependencies": {
-    "css-loader": "^1.0.0",
     "eslint": "^5.1.0",
     "eslint-config-openlayers": "^9.2.0",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "html-webpack-plugin": "^3.2.0",
-    "style-loader": "^0.21.0",
-    "webpack": "^4.16.0",
-    "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.4"
+    "parcel-bundler": "^1.9.7"
   },
   "eslintConfig": {
     "extends": "openlayers"
