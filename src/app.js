@@ -346,7 +346,7 @@ export default class {
     this.map.getView().on('change:resolution', (evt) => {
       const resolution = evt.target.get('resolution');
       const units = this.map.getView().getProjection().getUnits();
-      const dpi = 96;//25.4 / 0.28;
+      const dpi = 90;//25.4 / 0.28;
       const mpu = METERS_PER_UNIT[units];
       const scale = Math.round(resolution * mpu * 39.37 * dpi);
       this.updateScaleLabel(scale);
