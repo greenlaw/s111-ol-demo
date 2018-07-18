@@ -88,9 +88,7 @@ export default class {
   constructor() {
     this.initMap();
     this.initLabels();
-    this.initBasemapControl();
-    this.initENC();
-    this.initS111();
+    this.initMenu();
   }
 
   initMap() {
@@ -134,6 +132,23 @@ export default class {
     });
   }
 
+  initMenu() {
+    this.menu_outer = document.createElement('div');
+    this.menu_outer.className = 'menu-outer';
+    this.menu_inner = document.createElement('div');
+    this.menu_inner.className = 'menu-inner';
+
+    this.initBasemapControl();
+    this.initS111();
+    this.initENC();
+
+    // Trigger layer update
+    this.updateOFS(this.ofsControl.options[this.ofsControl.selectedIndex].value);
+
+    this.menu_outer.appendChild(this.menu_inner);
+    document.getElementById('map-container').appendChild(this.menu_outer);
+  }
+
   initRNC() {
     this.layer_rnc = new TileLayer({
       source: new XYZSource({
@@ -168,14 +183,37 @@ export default class {
     };
 
     this.layer_enc = new ImageLayer({
-      source: source_enc
+      source: source_enc,
+      visible: false
     });
     this.map.addLayer(this.layer_enc);
+
+    this.encControlElem = document.createElement('div');
+    this.encControlElem.className = 'layer-toggle';
+    this.encControlLabel = document.createElement('label');
+    this.encControl = document.createElement('input');
+    this.encControl.setAttribute('type', 'checkbox');
+    this.encControl.setAttribute('checked', 'checked');
+    this.encControlLabel.appendChild(this.encControl);
+    this.encControlLabelSpan = document.createElement('span');
+    this.encControlLabel.appendChild(this.encControlLabelSpan);
+    this.encControlLabelSpan.appendChild(document.createTextNode('Electronic Charts'));
+    this.encControlElem.appendChild(this.encControlLabel);
+    const encControlChanged = (evt) => {
+      if (this.encControl.checked) {
+        this.layer_enc.setVisible(true);
+      } else {
+        this.layer_enc.setVisible(false);
+      }
+    };
+    this.encControl.addEventListener('change', encControlChanged);
+    encControlChanged();
+    this.menu_inner.appendChild(this.encControlElem);
   }
 
   initBasemapControl() {
+    this.basemapControlElem = document.createElement('div');
     this.basemapControl = document.createElement('select');
-    this.basemapControl.setAttribute('id', 'basemap');
     const basemaps = {
       'esri-sat': {
         'label': 'ESRI Satellite Imagery',
@@ -203,7 +241,8 @@ export default class {
       this.basemapLayer.setSource(basemaps[evt.target.value].source);
     });
 
-    document.getElementById('map-container').appendChild(this.basemapControl);
+    this.basemapControlElem.appendChild(this.basemapControl);
+    this.menu_inner.appendChild(this.basemapControlElem);
   }
 
   updateScaleLabel(scale) {
@@ -260,13 +299,13 @@ export default class {
 
   initLabels() {
     this.time_label = document.createElement('div');
-    this.time_label.setAttribute('id', 'time_label');
+    this.time_label.className = 'time_label';
     this.time_label_text = document.createTextNode('');
     this.time_label.appendChild(this.time_label_text);
     document.getElementById('map-container').appendChild(this.time_label);
 
     this.scale_label = document.createElement('div');
-    this.scale_label.setAttribute('id', 'scale_label');
+    this.scale_label.className = 'scale_label';
     this.scale_label_text = document.createTextNode('');
     this.scale_label.appendChild(this.scale_label_text);
     document.getElementById('map-container').appendChild(this.scale_label);
@@ -282,8 +321,8 @@ export default class {
   }
 
   initS111() {
+    this.ofsControlElem = document.createElement('div');
     this.ofsControl = document.createElement('select');
-    this.ofsControl.setAttribute('id', 'ofs');
     Object.entries(S111_MODELS).forEach(([id, ofs]) => {
       const option = document.createElement('option');
       option.setAttribute('value', id);
@@ -294,8 +333,8 @@ export default class {
     this.ofsControl.addEventListener('change', (evt) => {
       this.updateOFS(evt.target.value);
     });
-    this.updateOFS(this.ofsControl.options[this.ofsControl.selectedIndex].value);
 
-    document.getElementById('map-container').appendChild(this.ofsControl);
+    this.ofsControlElem.appendChild(this.ofsControl);
+    this.menu_inner.appendChild(this.ofsControlElem);
   }
 }
