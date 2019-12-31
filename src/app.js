@@ -162,7 +162,7 @@ export default class {
 
   initENC() {
     const source_enc = new ArcGISRestImageSource({
-      url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/Maritime%20Chart%20Server/MapServer',
+      url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/MapServer',
       params: {
         'layers': 'show:0,2,3,4,5,6,7',
         'format': 'png8',
