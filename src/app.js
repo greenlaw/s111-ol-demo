@@ -183,10 +183,202 @@ export default class {
         'layers': 'show:2,3,4,5,6,7',
         'format': 'png8',
         'bboxsr': '{"wkid":3857}',
-        'display_params':`{"ECDISParameters":{"version":"1.0","StaticParameters":{"Parameter":[{"name":"AreaSymbolizationType","value":2},{"name":"PointSymbolizationType","value":2}]},"DynamicParameters":{"Parameter":[{"name":"ColorScheme","value":3},{"name":"DisplayDepthUnits","value":1},{"name":"TwoDepthShades","value":1},{"name":"DisplayNOBJNM","value":1},{"name":"HonorScamin","value":2},{"name":"ShallowDepthPattern","value":1},{"name":"ShallowContour","value":2},{"name":"SafetyContour","value":10},{"name":"DeepContour","value":30},{"name":"DisplayCategory","value":"1,2,4"}]}}}`
+        'display_params': JSON.stringify({
+          "ECDISParameters": {
+            "version": "10.6.1 P5",
+            "DynamicParameters": {
+              "Parameter": [{
+                "name": "AreaSymbolizationType",
+                "value": 2
+              }, {
+                "name": "AttDesc",
+                "value": 1
+              }, {
+                "name": "ColorScheme",
+                "value": 0
+              }, {
+                "name": "CompassRose",
+                "value": 1
+              }, {
+                "name": "DataQuality",
+                "value": 1
+              }, {
+                "name": "DateDependencyRange",
+                "value": ""
+              }, {
+                "name": "DateDependencySymbols",
+                "value": 1
+              }, {
+                "name": "DeepContour",
+                "value": 30
+              }, {
+                "name": "DisplayAIOFeatures",
+                "value": "1,2,3,4,5,6,7"
+              }, {
+                "name": "DisplayCategory",
+                "value": "1,2,4"
+              }, {
+                "name": "DisplayDepthUnits",
+                "value": 1
+              }, {
+                "name": "DisplayFrames",
+                "value": 2
+              }, {
+                "name": "DisplayFrameText",
+                "value": 0
+              }, {
+                "name": "DisplayFrameTextPlacement",
+                "value": 1
+              }, {
+                "name": "DisplayLightSectors",
+                "value": 2
+              }, {
+                "name": "DisplayNOBJNM",
+                "value": 2
+              }, {
+                "name": "DisplaySafeSoundings",
+                "value": 2
+              }, {
+                "name": "HonorScamin",
+                "value": 2
+              }, {
+                "name": "IntendedUsage",
+                "value": "0"
+              }, {
+                "name": "IsolatedDangers",
+                "value": 1
+              }, {
+                "name": "IsolatedDangersOff",
+                "value": 1
+              }, {
+                "name": "LabelContours",
+                "value": 1
+              }, {
+                "name": "LabelSafetyContours",
+                "value": 1
+              }, {
+                "name": "OptionalDeepSoundings",
+                "value": 1
+              }, {
+                "name": "PointSymbolizationType",
+                "value": 2
+              }, {
+                "name": "RemoveDuplicateText",
+                "value": 2
+              }, {
+                "name": "SafetyContour",
+                "value": 30
+              }, {
+                "name": "SafetyDepth",
+                "value": 30
+              }, {
+                "name": "ShallowContour",
+                "value": 2
+              }, {
+                "name": "TextHalo",
+                "value": 2
+              }, {
+                "name": "TwoDepthShades",
+                "value": 1
+              }],
+              "ParameterGroup": [{
+                "name": "AreaSymbolSize",
+                "Parameter": [{
+                  "name": "scaleFactor",
+                  "value": 1
+                }, {
+                  "name": "minZoom",
+                  "value": 0.1
+                }, {
+                  "name": "maxZoom",
+                  "value": 1.2
+                }]
+              }, {
+                "name": "DatasetDisplayRange",
+                "Parameter": [{
+                  "name": "minZoom",
+                  "value": 0.1
+                }, {
+                  "name": "maxZoom",
+                  "value": 1.2
+                }]
+              }, {
+                "name": "LineSymbolSize",
+                "Parameter": [{
+                  "name": "scaleFactor",
+                  "value": 1
+                }, {
+                  "name": "minZoom",
+                  "value": 0.1
+                }, {
+                  "name": "maxZoom",
+                  "value": 1.2
+                }]
+              }, {
+                "name": "PointSymbolSize",
+                "Parameter": [{
+                  "name": "scaleFactor",
+                  "value": 1
+                }, {
+                  "name": "minZoom",
+                  "value": 0.1
+                }, {
+                  "name": "maxZoom",
+                  "value": 1.2
+                }]
+              }, {
+                "name": "TextGroups",
+                "Parameter": [{
+                  "name": "11",
+                  "value": 2
+                }, {
+                  "name": "21",
+                  "value": 2
+                }, {
+                  "name": "23",
+                  "value": 2
+                }, {
+                  "name": "24",
+                  "value": 2
+                }, {
+                  "name": "25",
+                  "value": 2
+                }, {
+                  "name": "26",
+                  "value": 2
+                }, {
+                  "name": "27",
+                  "value": 2
+                }, {
+                  "name": "28",
+                  "value": 2
+                }, {
+                  "name": "29",
+                  "value": 2
+                }, {
+                  "name": "30",
+                  "value": 2
+                }]
+              }, {
+                "name": "TextSize",
+                "Parameter": [{
+                  "name": "scaleFactor",
+                  "value": 1
+                }, {
+                  "name": "minZoom",
+                  "value": 0.1
+                }, {
+                  "name": "maxZoom",
+                  "value": 1.2
+                }]
+              }]
+            }
+          }
+        })
       }
     });
 
+    // Workaround for case sensitivity on ArcGIS Server Maritime Chart Service
     const oldfunc = source_enc.getRequestUrl_;
     source_enc.getRequestUrl_ = function(extent, size, pixelRatio, projection, params) {
       return oldfunc.apply(this, arguments)
