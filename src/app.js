@@ -11,6 +11,7 @@ import View from 'ol/View';
 import ImageLayer from 'ol/layer/Image';
 import ImageWMSSource from 'ol/source/ImageWMS';
 import OSMSource from 'ol/source/OSM';
+import TileWMS from 'ol/source/TileWMS';
 import TileLayer from 'ol/layer/Tile';
 import XYZSource from 'ol/source/XYZ';
 
@@ -142,6 +143,7 @@ export default class {
     this.initBasemapControl();
     this.initS111();
     this.initENC();
+    this.initTileScheme();
     this.initAnimationControl();
 
     // Trigger layer update
@@ -149,6 +151,20 @@ export default class {
 
     this.menu_outer.appendChild(this.menu_inner);
     document.getElementById('map-container').appendChild(this.menu_outer);
+  }
+
+  initTileScheme() {
+    this.layer_tilescheme = new TileLayer({
+      source: new TileWMS({
+        url: 'http://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+        params: {
+          'LAYERS': 'S111_Tiles',
+          'FORMAT': 'image/png',
+          'TRANSPARENT': 'true'
+        }
+      })
+    });
+    this.map.addLayer(this.layer_tilescheme);
   }
 
   initRNC() {
@@ -164,7 +180,7 @@ export default class {
     const source_enc = new ArcGISRestImageSource({
       url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/ENCOnline/MapServer/exts/MaritimeChartService/MapServer',
       params: {
-        'layers': 'show:0,2,3,4,5,6,7',
+        'layers': 'show:2,3,4,5,6,7',
         'format': 'png8',
         'bboxsr': '{"wkid":3857}',
         'display_params':`{"ECDISParameters":{"version":"1.0","StaticParameters":{"Parameter":[{"name":"AreaSymbolizationType","value":2},{"name":"PointSymbolizationType","value":2}]},"DynamicParameters":{"Parameter":[{"name":"ColorScheme","value":3},{"name":"DisplayDepthUnits","value":1},{"name":"TwoDepthShades","value":1},{"name":"DisplayNOBJNM","value":1},{"name":"HonorScamin","value":2},{"name":"ShallowDepthPattern","value":1},{"name":"ShallowContour","value":2},{"name":"SafetyContour","value":10},{"name":"DeepContour","value":30},{"name":"DisplayCategory","value":"1,2,4"}]}}}`
