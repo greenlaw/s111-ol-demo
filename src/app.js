@@ -3,7 +3,7 @@ import './css/s111.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import {defaults as defaultControls, ScaleLine} from 'ol/control.js';
-import {fromLonLat, METERS_PER_UNIT} from 'ol/proj';
+import {fromLonLat, toLonLat, METERS_PER_UNIT} from 'ol/proj';
 import ArcGISRestImageSource from 'ol/source/ImageArcGISRest';
 import ArcGISRestTileSource from 'ol/source/TileArcGISRest';
 import Map from 'ol/Map';
@@ -14,6 +14,7 @@ import OSMSource from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS';
 import TileLayer from 'ol/layer/Tile';
 import XYZSource from 'ol/source/XYZ';
+import { Overlay } from 'ol';
 
 const S111_MODELS = {
   'cbofs': {
@@ -89,6 +90,7 @@ const S111_MODELS = {
 export default class {
   constructor() {
     this.initMap();
+    this.initEventHandlers();
     this.initLabels();
     this.initMenu();
   }
@@ -134,6 +136,113 @@ export default class {
     });
   }
 
+  buildAttributeTable(container, attributes) {
+    container.innerHTML = `<table class="popup_table">
+  <thead>
+    <tr>
+      <th>S-100 Product</th>
+      <th>${attributes.S100_Prod}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Forecast Model System</td>
+      <td>${attributes.OFS}</td>
+    </tr>
+    <tr>
+      <td>Agency</td>
+      <td>NOS</td>
+    </tr>
+    <tr>
+      <td>Forecast Cycles</td>
+      <td>${attributes.Cycles}</td>
+    </tr>
+    <tr>
+       <td>Forecast Horizon</td>
+       <td>${attributes.Projection}</td>
+    </tr>
+    <tr>
+       <td>Product Type</td>
+       <td>${attributes.Prod_Type}</td>
+    </tr>
+      <tr>
+       <td>Variable</td>
+       <td>${attributes.Variable}</td>
+    </tr>
+     <tr>
+       <td>Depth</td>
+       <td>${attributes.Depth}</td>
+    </tr>
+    <tr>
+       <td>Spatial Resolution</td>
+       <td>${attributes.SpatialRes}</td>
+    </tr>
+    <tr>
+       <td>Cell Name</td>
+       <td>${attributes.CellName}</td>
+    </tr>
+    <tr>
+       <td>Band Number</td>
+       <td>${attributes.Band_Num}</td>
+    </tr>
+    <tr>
+       <td>Download</td>
+       <td><a href=''>Latest Forecast File (S-111 HDF-5)</a></td>
+    </tr>
+  </tbody>
+</table>`;
+  }
+
+  initEventHandlers() {
+    this.clickOverlay = new Overlay({
+      element: document.getElementById("query-popup"),
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+    this.map.addOverlay(this.clickOverlay);
+
+    this.map.on("singleclick", (evt) => {
+      //const lonLat = toLonLat(evt.coordinate);
+      let queryURL = this.source_tilescheme.getGetFeatureInfoUrl(
+        evt.coordinate,
+        this.map.getView().getResolution(),
+        'EPSG:3857',
+        {'INFO_FORMAT': 'application/json'}
+      );
+      // Workaround issue with GeoServer 2.12 WMS 1.3.0 GetFeatureInfo requests
+      queryURL = queryURL.replace("VERSION=1.3.0","VERSION=1.1.1");
+      queryURL = queryURL.replace("I=", "X=");
+      queryURL = queryURL.replace("J=", "Y=");
+      queryURL = queryURL.replace("CRS=", "SRS=");
+      
+      fetch(queryURL)
+        .then(response => response.json())
+        .then((data) => {
+          if (data.features && data.features.length > 0 && data.features[0].properties) {
+            const contentElem = document.getElementById("query-popup-content");
+            
+            if (this.popupTableContainer) {
+              this.popupTableContainer.remove();
+              this.popupTableContainer = null;
+            }
+            this.popupTableContainer = document.createElement('div');
+            this.buildAttributeTable(this.popupTableContainer, data.features[0].properties);
+            contentElem.appendChild(this.popupTableContainer);
+            this.clickOverlay.setPosition(evt.coordinate);
+          }
+        });
+    });
+
+    this.overlayCloser = document.getElementById("query-popup-closer");
+    this.overlayCloser.onclick = () => {
+      this.clickOverlay.setPosition(undefined);
+      this.overlayCloser.blur();
+      return false;
+    }
+  }
+
   initMenu() {
     this.menu_outer = document.createElement('div');
     this.menu_outer.className = 'menu-outer';
@@ -154,15 +263,16 @@ export default class {
   }
 
   initTileScheme() {
+    this.source_tilescheme = new TileWMS({
+      url: 'http://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      params: {
+        'LAYERS': 'S111_Tiles',
+        'FORMAT': 'image/png',
+        'TRANSPARENT': 'true'
+      }
+    });
     this.layer_tilescheme = new TileLayer({
-      source: new TileWMS({
-        url: 'http://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
-        params: {
-          'LAYERS': 'S111_Tiles',
-          'FORMAT': 'image/png',
-          'TRANSPARENT': 'true'
-        }
-      })
+      source: this.source_tilescheme
     });
     this.map.addLayer(this.layer_tilescheme);
   }
