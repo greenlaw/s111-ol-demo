@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import {defaults as defaultControls, ScaleLine} from 'ol/control.js';
 import {fromLonLat, toLonLat, METERS_PER_UNIT} from 'ol/proj';
+import { GeoJSON } from 'ol/format';
 import ArcGISRestImageSource from 'ol/source/ImageArcGISRest';
 import ArcGISRestTileSource from 'ol/source/TileArcGISRest';
 import Map from 'ol/Map';
@@ -15,6 +16,10 @@ import TileWMS from 'ol/source/TileWMS';
 import TileLayer from 'ol/layer/Tile';
 import XYZSource from 'ol/source/XYZ';
 import { Overlay } from 'ol';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import Stroke from 'ol/style/Stroke';
+import Style from 'ol/style/Style';
 
 const S111_MODELS = {
   'cbofs': {
@@ -136,6 +141,23 @@ export default class {
     });
   }
 
+  /**
+   * Vector layer for highlighting selected features.
+   */
+  initHighlightLayer() {
+    this.source_highlight = new VectorSource();
+    this.layer_highlight = new VectorLayer({
+      source: this.source_highlight,
+      style: new Style({
+        stroke: new Stroke({
+          color: 'rgba(255,255,0,1.0)',
+          width: 4
+        })
+      })
+    });
+    this.map.addLayer(this.layer_highlight);
+  }
+
   buildAttributeTable(container, attributes) {
     container.innerHTML = `<table class="popup_table">
   <thead>
@@ -221,6 +243,9 @@ export default class {
         .then(response => response.json())
         .then((data) => {
           if (data.features && data.features.length > 0 && data.features[0].properties) {
+            this.source_highlight.clear();
+            const geojsonFeature = new GeoJSON().readFeature(data.features[0]);
+            this.source_highlight.addFeature(geojsonFeature);
             const contentElem = document.getElementById("query-popup-content");
             
             if (this.popupTableContainer) {
@@ -237,6 +262,7 @@ export default class {
 
     this.overlayCloser = document.getElementById("query-popup-closer");
     this.overlayCloser.onclick = () => {
+      this.source_highlight.clear();
       this.clickOverlay.setPosition(undefined);
       this.overlayCloser.blur();
       return false;
@@ -253,6 +279,7 @@ export default class {
     this.initS111();
     this.initENC();
     this.initTileScheme();
+    this.initHighlightLayer();
     this.initAnimationControl();
 
     // Trigger layer update
