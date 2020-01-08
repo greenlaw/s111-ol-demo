@@ -29,11 +29,42 @@ import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
-const S111_MODELS = {
-  'cbofs': {
+const REGIONS = {
+  'chesapeake': {
     'label': 'Chesapeake Bay',
     'center': [-76.087, 37.6],
-    'zoom': 9,
+    'zoom': 9
+  },
+  // 'delaware': {
+  //   'label': 'Delaware Bay',
+  //   'center': [-74.574, 38.75],
+  //   'zoom': 10
+  // },
+  'gomaine': {
+    'label': 'Gulf of Maine',
+    'center': [-69.833, 42.223],
+    'zoom': 8
+  },
+  'gomex': {
+    'label': 'Northern Gulf of Mexico',
+    'center': [-90.925, 28.960],
+    'zoom': 8
+  },
+  'ny': {
+    'label': 'New York/New Jersey Harbor',
+    'center': [-74.009, 40.551],
+    'zoom': 11
+  }
+  // ,
+  // 'tampa': {
+  //   'label': 'Tampa Bay',
+  //   'center': [-82.773, 27.557],
+  //   'zoom': 10
+  // }
+};
+
+const S111_MODELS = {
+  'chesapeake': {
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
@@ -47,10 +78,7 @@ const S111_MODELS = {
     'end_time': new Date('2020-01-02T18:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
-  // 'dbofs': {
-  //   'label': 'Delaware Bay',
-  //   'center': [-74.574, 38.75],
-  //   'zoom': 10,
+  // 'delaware': {
   //   'source': new ImageWMSSource({
   //     url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
   //     params: {
@@ -64,10 +92,7 @@ const S111_MODELS = {
   //   'end_time': new Date('2018-07-15T12:00:00.000Z'),
   //   'time_step': 1 * 6 * 60 * 1000 // 1 hour
   // },
-  'gomofs': {
-    'label': 'Gulf of Maine',
-    'center': [-69.833, 42.223],
-    'zoom': 8,
+  'gomaine': {
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
@@ -81,10 +106,7 @@ const S111_MODELS = {
     'end_time': new Date('2020-01-03T18:00:00.000Z'),
     'time_step': 3 * 60 * 60 * 1000 // 3 hours
   },
-  'ngofs': {
-    'label': 'Northern Gulf of Mexico',
-    'center': [-90.925, 28.960],
-    'zoom': 8,
+  'gomex': {
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
@@ -98,10 +120,7 @@ const S111_MODELS = {
     'end_time': new Date('2020-01-02T15:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
-  'nyofs': {
-    'label': 'New York/New Jersey Harbor',
-    'center': [-74.009, 40.551],
-    'zoom': 11,
+  'ny': {
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
@@ -116,10 +135,7 @@ const S111_MODELS = {
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   }
   // ,
-  // 'tbofs': {
-  //   'label': 'Tampa Bay',
-  //   'center': [-82.773, 27.557],
-  //   'zoom': 10,
+  // 'tampa': {
   //   'source': new ImageWMSSource({
   //     url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
   //     params: {
@@ -251,7 +267,7 @@ export default class {
        <td>${attributes.Band_Num}</td>
     </tr>
     <tr>
-       <td>Download</td>
+       <td>Get Data</td>
        <td><a href=''>Latest Forecast File (S-111 HDF-5)</a></td>
     </tr>
   </tbody>
@@ -319,15 +335,16 @@ export default class {
     this.menu_inner.className = 'menu-inner';
 
     this.initBasemapControl();
-    this.initS111();
+    this.initRegions();
     this.initENC();
-    this.initTileScheme();
     this.initBathy();
+    this.initS111();
+    this.initTileScheme();
     this.initHighlightLayer();
     this.initAnimationControl();
 
     // Trigger layer update
-    this.updateOFS(this.ofsControl.options[this.ofsControl.selectedIndex].value);
+    this.updateRegion(this.regionControl.options[this.regionControl.selectedIndex].value);
 
     this.menu_outer.appendChild(this.menu_inner);
     document.getElementById('map-container').appendChild(this.menu_outer);
@@ -370,7 +387,7 @@ export default class {
     this.bathyControlLabel.appendChild(this.bathyControl);
     this.bathyControlLabelSpan = document.createElement('span');
     this.bathyControlLabel.appendChild(this.bathyControlLabelSpan);
-    this.bathyControlLabelSpan.appendChild(document.createTextNode('Bathymetry'));
+    this.bathyControlLabelSpan.appendChild(document.createTextNode('Bathymetry (S-102)'));
     this.bathyControlElem.appendChild(this.bathyControlLabel);
     const bathyControlChanged = (evt) => {
       if (this.bathyControl.checked) {
@@ -661,7 +678,7 @@ export default class {
     this.encControlLabel.appendChild(this.encControl);
     this.encControlLabelSpan = document.createElement('span');
     this.encControlLabel.appendChild(this.encControlLabelSpan);
-    this.encControlLabelSpan.appendChild(document.createTextNode('Electronic Charts'));
+    this.encControlLabelSpan.appendChild(document.createTextNode('Electronic Charts (S-57/S-101)'));
     this.encControlElem.appendChild(this.encControlLabel);
     const encControlChanged = (evt) => {
       if (this.encControl.checked) {
@@ -748,9 +765,24 @@ export default class {
     this.time_label_text.nodeValue = `Valid Time: ${timeval.toGMTString()}`;
   }
 
-  updateOFS(ofs_id) {
-    if (!(ofs_id in S111_MODELS)) {
-      console.error('Model does not exist:', ofs_id);
+  updateRegion(region) {
+    if (!(region in REGIONS)) {
+      console.error('Region not defined:', region);
+      return;
+    }
+
+    this.map.getView().setCenter(fromLonLat(REGIONS[region].center));
+    this.map.getView().setZoom(REGIONS[region].zoom);
+  }
+
+  updateOFS(region) {
+    if (!region) {
+      if (this.layer_s111) {
+        this.layer_s111.setVisible(false);
+      }
+      return;
+    } else if (!(region in S111_MODELS)) {
+      console.error('Model does not defined for region:', region);
       return;
     }
 
@@ -759,7 +791,7 @@ export default class {
       this.animation_interval = null;
     }
 
-    const ofs = S111_MODELS[ofs_id];
+    const ofs = S111_MODELS[region];
 
     let timeval = ofs.start_time;
     const params = ofs.source.getParams();
@@ -773,11 +805,9 @@ export default class {
       });
       this.map.addLayer(this.layer_s111);
     } else {
-      this.layer_s111.setSource(S111_MODELS[ofs_id].source);
+      this.layer_s111.setSource(ofs.source);
+      this.layer_s111.setVisible(true);
     }
-
-    this.map.getView().setCenter(fromLonLat(ofs.center));
-    this.map.getView().setZoom(ofs.zoom);
 
     this.ofs_play = () => {
       if (timeval >= ofs.end_time) {
@@ -815,21 +845,45 @@ export default class {
     });
   }
 
-  initS111() {
-    this.ofsControlElem = document.createElement('div');
-    this.ofsControl = document.createElement('select');
-    Object.entries(S111_MODELS).forEach(([id, ofs]) => {
+  initRegions() {
+    this.regionControlElem = document.createElement('div');
+    this.regionControl = document.createElement('select');
+    Object.entries(REGIONS).forEach(([id, region]) => {
       const option = document.createElement('option');
       option.setAttribute('value', id);
       //option.setAttribute('selected', 'selected');
-      option.appendChild(document.createTextNode(ofs.label));
-      this.ofsControl.appendChild(option);
+      option.appendChild(document.createTextNode(region.label));
+      this.regionControl.appendChild(option);
     });
-    this.ofsControl.addEventListener('change', (evt) => {
-      this.updateOFS(evt.target.value);
+    this.regionControl.addEventListener('change', (evt) => {
+      this.updateRegion(evt.target.value);
     });
 
-    this.ofsControlElem.appendChild(this.ofsControl);
+    this.regionControlElem.appendChild(this.regionControl);
+    this.menu_inner.appendChild(this.regionControlElem);
+  }
+
+  initS111() {
+    this.ofsControlElem = document.createElement('div');
+    this.ofsControlElem.className = 'layer-toggle';
+    this.ofsControlLabel = document.createElement('label');
+    this.ofsControl = document.createElement('input');
+    this.ofsControl.setAttribute('type', 'checkbox');
+    this.ofsControl.setAttribute('checked', 'checked');
+    this.ofsControlLabel.appendChild(this.ofsControl);
+    this.ofsControlLabelSpan = document.createElement('span');
+    this.ofsControlLabel.appendChild(this.ofsControlLabelSpan);
+    this.ofsControlLabelSpan.appendChild(document.createTextNode('Surface Currents (S-111)'));
+    this.ofsControlElem.appendChild(this.ofsControlLabel);
+    const ofsControlChanged = (evt) => {
+      if (this.ofsControl.checked) {
+        this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
+      } else {
+        this.updateOFS(null);
+      }
+    };
+    this.ofsControl.addEventListener('change', ofsControlChanged);
+    ofsControlChanged();
     this.menu_inner.appendChild(this.ofsControlElem);
   }
 }
