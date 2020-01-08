@@ -4,19 +4,66 @@
     <meta charset="utf-8">
     <title>S-111 Demo</title>
     <style>
-      html, body, #map-container {
+      html, body {
         margin: 0;
         height: 100%;
         width: 100%;
         font-family: sans-serif;
+        background-color: white;
+      }
+      #header {
+        position: absolute;
+        height: 50px;
+        width: 100%;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: rgb(34, 87, 171);
+        color: rgb(202, 221, 252);
+        font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', 'Trebuchet MS', Arial, sans-serif;
+      }
+      #banner {
+        position: absolute;
+        left: 20px;
+        top: 10px;
+        user-select: none;
+        text-shadow: 3px 3px 3px rgb(21, 52, 89);
+      }
+      #title {
+        font-size: 2em;
+        letter-spacing: 3px;
+      }
+      #subtitle {
+        font-size: 1em;
+        font-style: italic;
+        padding-left: 30px;
+      }
+      #main {
+        position: absolute;
+        height: calc(100% - 50px);
+        width: 100%;
+        top: 50px;
       }
     </style>
   </head>
   <body>
-    <div id="map-container"></div>
-    <div id="query-popup" class="ol-popup">
-      <a href="#" id="query-popup-closer" class="ol-popup-closer"></a>
-      <div id="query-popup-content"></div>
+    <div id="header">
+      <div id="banner">
+        <span id="title">
+          Precision Navigation Data Access Portal
+        </span>
+        <span id="subtitle">
+          Discover &rarr; Visualize &rarr; Download
+        </span>
+      </div>
+    </div>
+    <div id="main">
+      <div id="map-container"></div>
+      <div id="query-popup" class="ol-popup">
+        <a href="#" id="query-popup-closer" class="ol-popup-closer"></a>
+        <div id="query-popup-content"></div>
+      </div>
     </div>
     <script src="main.js"></script>
   </body>
