@@ -38,6 +38,14 @@
   color: rgba(200,200,200,1.0);
 }
 
+.menu-inner .layer-toggle span {
+  padding-left: 5px;
+}
+
+.menu-inner .layer-disabled {
+  color: rgba(150,150,150,1.0);
+}
+
 .menu-inner select {
   background-color: rgba(0,0,0,0.25);
   color: rgba(200,200,200,1.0);
@@ -172,6 +180,7 @@
   background-color: #4CAF50;
   color: white;
 }
+
 .pagination .page-item .page-link {
   cursor: pointer;
 }

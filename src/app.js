@@ -408,6 +408,7 @@ export default class {
     this.initRegions();
     this.initENC();
     this.initBathy();
+    this.initS104();
     this.initS111();
     this.initTileScheme();
     this.initHighlightLayer();
@@ -932,6 +933,23 @@ export default class {
 
     this.regionControlElem.appendChild(this.regionControl);
     this.menu_inner.appendChild(this.regionControlElem);
+  }
+
+  initS104() {
+    this.s104ControlElem = document.createElement('div');
+    this.s104ControlElem.className = 'layer-toggle';
+    this.s104ControlLabel = document.createElement('label');
+    this.s104Control = document.createElement('input');
+    this.s104Control.setAttribute('type', 'checkbox');
+    this.s104Control.setAttribute('disabled', 'disabled');
+    // this.s104Control.setAttribute('checked', 'checked');
+    this.s104ControlLabel.appendChild(this.s104Control);
+    this.s104ControlLabelSpan = document.createElement('span');
+    this.s104ControlLabel.appendChild(this.s104ControlLabelSpan);
+    this.s104ControlLabelSpan.className = 'layer-disabled';
+    this.s104ControlLabelSpan.appendChild(document.createTextNode('Water Levels (S-104)'));
+    this.s104ControlElem.appendChild(this.s104ControlLabel);
+    this.menu_inner.appendChild(this.s104ControlElem);
   }
 
   initS111() {
