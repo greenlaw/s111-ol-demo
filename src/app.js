@@ -857,6 +857,7 @@ export default class {
     });
     this.regionControl.addEventListener('change', (evt) => {
       this.updateRegion(evt.target.value);
+      this.ofsControlChanged();
     });
 
     this.regionControlElem.appendChild(this.regionControl);
@@ -875,15 +876,15 @@ export default class {
     this.ofsControlLabel.appendChild(this.ofsControlLabelSpan);
     this.ofsControlLabelSpan.appendChild(document.createTextNode('Surface Currents (S-111)'));
     this.ofsControlElem.appendChild(this.ofsControlLabel);
-    const ofsControlChanged = (evt) => {
+    this.ofsControlChanged = (evt) => {
       if (this.ofsControl.checked) {
         this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
       } else {
         this.updateOFS(null);
       }
     };
-    this.ofsControl.addEventListener('change', ofsControlChanged);
-    ofsControlChanged();
+    this.ofsControl.addEventListener('change', this.ofsControlChanged);
+    this.ofsControlChanged();
     this.menu_inner.appendChild(this.ofsControlElem);
   }
 }
