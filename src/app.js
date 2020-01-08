@@ -337,6 +337,28 @@ export default class {
       source: this.source_tilescheme
     });
     this.map.addLayer(this.layer_tilescheme);
+
+    this.tileControlElem = document.createElement('div');
+    this.tileControlElem.className = 'layer-toggle';
+    this.tileControlLabel = document.createElement('label');
+    this.tileControl = document.createElement('input');
+    this.tileControl.setAttribute('type', 'checkbox');
+    this.tileControl.setAttribute('checked', 'checked');
+    this.tileControlLabel.appendChild(this.tileControl);
+    this.tileControlLabelSpan = document.createElement('span');
+    this.tileControlLabel.appendChild(this.tileControlLabelSpan);
+    this.tileControlLabelSpan.appendChild(document.createTextNode('ENC Tile Scheme'));
+    this.tileControlElem.appendChild(this.tileControlLabel);
+    const tileControlChanged = (evt) => {
+      if (this.tileControl.checked) {
+        this.layer_tilescheme.setVisible(true);
+      } else {
+        this.layer_tilescheme.setVisible(false);
+      }
+    };
+    this.tileControl.addEventListener('change', tileControlChanged);
+    tileControlChanged();
+    this.menu_inner.appendChild(this.tileControlElem);
   }
 
   initRNC() {
