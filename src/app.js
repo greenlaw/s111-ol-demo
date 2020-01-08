@@ -937,7 +937,7 @@ export default class {
 
   initS104() {
     this.s104ControlElem = document.createElement('div');
-    this.s104ControlElem.className = 'layer-toggle';
+    this.s104ControlElem.className = 'layer-toggle layer-disabled';
     this.s104ControlLabel = document.createElement('label');
     this.s104Control = document.createElement('input');
     this.s104Control.setAttribute('type', 'checkbox');
@@ -946,7 +946,6 @@ export default class {
     this.s104ControlLabel.appendChild(this.s104Control);
     this.s104ControlLabelSpan = document.createElement('span');
     this.s104ControlLabel.appendChild(this.s104ControlLabelSpan);
-    this.s104ControlLabelSpan.className = 'layer-disabled';
     this.s104ControlLabelSpan.appendChild(document.createTextNode('Water Levels (S-104)'));
     this.s104ControlElem.appendChild(this.s104ControlLabel);
     this.menu_inner.appendChild(this.s104ControlElem);
