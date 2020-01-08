@@ -2,6 +2,9 @@ import 'ol/ol.css';
 import './css/s111.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {defaults as defaultControls, ScaleLine} from 'ol/control.js';
 import {
   fromLonLat,
@@ -217,7 +220,40 @@ export default class {
     this.map.addLayer(this.layer_highlight);
   }
 
-  buildAttributeTable(container, attributes) {
+  showAttributeTableS102(container, attributes) {
+    container.innerHTML = `<table class="popup_table">
+  <thead>
+    <tr>
+      <th>S-100 Product</th>
+      <th>S-102 Bathymetry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Agency</td>
+      <td>NOS</td>
+    </tr>
+    <tr>
+       <td>Spatial Resolution</td>
+       <td> - </td>
+    </tr>
+    <tr>
+       <td>Cell Name</td>
+       <td>${attributes.CellName}</td>
+    </tr>
+    <tr>
+       <td>Band Number</td>
+       <td>${attributes.Band_Num}</td>
+    </tr>
+    <tr>
+       <td>Get Data</td>
+       <td><a href=''>S-102 HDF-5 File</a></td>
+    </tr>
+  </tbody>
+</table>`;
+  }
+
+  showAttributeTableS111(container, attributes) {
     container.innerHTML = `<table class="popup_table">
   <thead>
     <tr>
@@ -305,14 +341,48 @@ export default class {
             this.source_highlight.clear();
             const geojsonFeature = new GeoJSON().readFeature(data.features[0]);
             this.source_highlight.addFeature(geojsonFeature);
+
+            this.identifyAttributes = data.features[0].properties;
+
             const contentElem = document.getElementById("query-popup-content");
             
+            if (this.navElem) {
+              this.navElem.remove();
+              this.navElem = null;
+            }
+
+            this.navElem = document.createElement('div');
+            this.navElem.innerHTML = `<nav aria-label="S100 Products">
+  <ul class="pagination">
+    <li class="page-item" id="popup-nav-item-s102"><a class="page-link" id="popup-nav-link-s102">S-102</a></li>
+    <li class="page-item disabled" id="popup-nav-item-s104"><a class="page-link" id="popup-nav-link-s104" tabindex="-1">S-104</a></li>
+    <li class="page-item active" id="popup-nav-item-s111"><a class="page-link" id="popup-nav-link-s111">S-111</a></li>
+  </ul>
+</nav>`;
+
+            contentElem.appendChild(this.navElem);
+
+            const popupButtonS102 = document.getElementById("popup-nav-link-s102");
+            const popupItemS102 = document.getElementById("popup-nav-item-s102");
+            popupButtonS102.onclick = (evt) => {
+              popupItemS111.className = "page-item";
+              popupItemS102.className = "page-item active";
+              this.showAttributeTableS102(this.popupTableContainer, this.identifyAttributes);
+            };
+            const popupButtonS111 = document.getElementById("popup-nav-link-s111");
+            const popupItemS111 = document.getElementById("popup-nav-item-s111");
+            popupButtonS111.onclick = (evt) => {
+              popupItemS102.className = "page-item";
+              popupItemS111.className = "page-item active";
+              this.showAttributeTableS111(this.popupTableContainer, this.identifyAttributes);
+            };
+
             if (this.popupTableContainer) {
               this.popupTableContainer.remove();
               this.popupTableContainer = null;
             }
             this.popupTableContainer = document.createElement('div');
-            this.buildAttributeTable(this.popupTableContainer, data.features[0].properties);
+            this.showAttributeTableS111(this.popupTableContainer, this.identifyAttributes);
             contentElem.appendChild(this.popupTableContainer);
             this.clickOverlay.setPosition(evt.coordinate);
           }
