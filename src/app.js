@@ -29,67 +29,102 @@ const S111_MODELS = {
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
-        'layers': 's100ofs_Geo:cbofs',
+        'layers': 's100ofs_Geo:pn_cbofs',
         'format': 'image/png8',
         'transparent': 'true'
       },
       ratio: 1
     }),
-    'start_time': new Date('2018-07-13T13:00:00.000Z'),
-    'end_time': new Date('2018-07-15T12:00:00.000Z'),
+    'start_time': new Date('2019-12-31T19:00:00.000Z'),
+    'end_time': new Date('2020-01-02T18:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
-  'dbofs': {
-    'label': 'Delaware Bay',
-    'center': [-74.574, 38.75],
-    'zoom': 10,
-    'source': new ImageWMSSource({
-      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
-      params: {
-        'layers': 's100ofs_Geo:dbofs',
-        'format': 'image/png8',
-        'transparent': 'true'
-      },
-      ratio: 1
-    }),
-    'start_time': new Date('2018-07-13T13:00:00.000Z'),
-    'end_time': new Date('2018-07-15T12:00:00.000Z'),
-    'time_step': 1 * 6 * 60 * 1000 // 1 hour
-  },
+  // 'dbofs': {
+  //   'label': 'Delaware Bay',
+  //   'center': [-74.574, 38.75],
+  //   'zoom': 10,
+  //   'source': new ImageWMSSource({
+  //     url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+  //     params: {
+  //       'layers': 's100ofs_Geo:dbofs',
+  //       'format': 'image/png8',
+  //       'transparent': 'true'
+  //     },
+  //     ratio: 1
+  //   }),
+  //   'start_time': new Date('2018-07-13T13:00:00.000Z'),
+  //   'end_time': new Date('2018-07-15T12:00:00.000Z'),
+  //   'time_step': 1 * 6 * 60 * 1000 // 1 hour
+  // },
   'gomofs': {
     'label': 'Gulf of Maine',
-    'center': [-66.751, 42.019],
+    'center': [-69.833, 42.223],
     'zoom': 8,
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
-        'layers': 's100ofs_Geo:gomofs',
+        'layers': 's100ofs_Geo:pn_gomofs',
         'format': 'image/png8',
         'transparent': 'true'
       },
       ratio: 1
     }),
-    'start_time': new Date('2018-07-13T15:00:00.000Z'),
-    'end_time': new Date('2018-07-16T12:00:00.000Z'),
-    'time_step': 3 * 60 * 60 * 1000 // 1 hour
+    'start_time': new Date('2019-12-31T21:00:00.000Z'),
+    'end_time': new Date('2020-01-03T18:00:00.000Z'),
+    'time_step': 3 * 60 * 60 * 1000 // 3 hours
   },
-  'tbofs': {
-    'label': 'Tampa Bay',
-    'center': [-82.773, 27.557],
-    'zoom': 10,
+  'ngofs': {
+    'label': 'Northern Gulf of Mexico',
+    'center': [-90.925, 28.960],
+    'zoom': 8,
     'source': new ImageWMSSource({
       url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
       params: {
-        'layers': 's100ofs_Geo:tbofs',
+        'layers': 's100ofs_Geo:pn_ngofs',
         'format': 'image/png8',
         'transparent': 'true'
       },
       ratio: 1
     }),
-    'start_time': new Date('2018-07-11T13:00:00.000Z'),
-    'end_time': new Date('2018-07-13T12:00:00.000Z'),
+    'start_time': new Date('2019-12-31T16:00:00.000Z'),
+    'end_time': new Date('2020-01-02T15:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
+  },
+  'nyofs': {
+    'label': 'New York/New Jersey Harbor',
+    'center': [-74.009, 40.551],
+    'zoom': 11,
+    'source': new ImageWMSSource({
+      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      params: {
+        'layers': 's100ofs_Geo:pn_nyofs',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2019-12-31T18:00:00.000Z'),
+    'end_time': new Date('2020-01-02T23:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   }
+  // ,
+  // 'tbofs': {
+  //   'label': 'Tampa Bay',
+  //   'center': [-82.773, 27.557],
+  //   'zoom': 10,
+  //   'source': new ImageWMSSource({
+  //     url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+  //     params: {
+  //       'layers': 's100ofs_Geo:tbofs',
+  //       'format': 'image/png8',
+  //       'transparent': 'true'
+  //     },
+  //     ratio: 1
+  //   }),
+  //   'start_time': new Date('2018-07-11T13:00:00.000Z'),
+  //   'end_time': new Date('2018-07-13T12:00:00.000Z'),
+  //   'time_step': 1 * 60 * 60 * 1000 // 1 hour
+  // }
 };
 
 export default class {
