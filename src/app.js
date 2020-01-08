@@ -3,7 +3,13 @@ import './css/s111.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import {defaults as defaultControls, ScaleLine} from 'ol/control.js';
-import {fromLonLat, toLonLat, METERS_PER_UNIT} from 'ol/proj';
+import {
+  fromLonLat,
+  toLonLat,
+  METERS_PER_UNIT,
+  get as getProjection
+} from 'ol/proj';
+import { getWidth, getTopLeft } from 'ol/extent';
 import { GeoJSON } from 'ol/format';
 import ArcGISRestImageSource from 'ol/source/ImageArcGISRest';
 import ArcGISRestTileSource from 'ol/source/TileArcGISRest';
@@ -14,12 +20,14 @@ import ImageWMSSource from 'ol/source/ImageWMS';
 import OSMSource from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS';
 import TileLayer from 'ol/layer/Tile';
+import WMTS from 'ol/source/WMTS';
 import XYZSource from 'ol/source/XYZ';
 import { Overlay } from 'ol';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
 const S111_MODELS = {
   'cbofs': {
@@ -314,6 +322,7 @@ export default class {
     this.initS111();
     this.initENC();
     this.initTileScheme();
+    this.initBathy();
     this.initHighlightLayer();
     this.initAnimationControl();
 
@@ -322,6 +331,57 @@ export default class {
 
     this.menu_outer.appendChild(this.menu_inner);
     document.getElementById('map-container').appendChild(this.menu_outer);
+  }
+
+  initBathy() {
+    const epsg3857 = getProjection('EPSG:3857');
+    const size = getWidth(epsg3857.getExtent()) / 256;
+    const resolutions = new Array(19);
+    const matrixIds = new Array(19);
+    for (let z=0; z < 19; z++) {
+      resolutions[z] = size / Math.pow(2, z);
+      matrixIds[z] = z;
+    }
+    this.source_bag_hillshade = new WMTS({
+      url: 'https://gis.ngdc.noaa.gov/arcgis/rest/services/bag_hillshades/ImageServer/WMTS',
+      layer: 'bag_hillshades',
+      matrixSet: 'GoogleMapsCompatible',
+      format: 'image/jpgpng',
+      projection: epsg3857,
+      tileGrid: new WMTSTileGrid({
+        origin: getTopLeft(epsg3857.getExtent()),
+        resolutions: resolutions,
+        matrixIds: matrixIds
+      }),
+      style: 'default',
+      wrapX: true
+    });
+    this.layer_bag_hillshade = new TileLayer({
+      source: this.source_bag_hillshade
+    });
+    this.map.addLayer(this.layer_bag_hillshade);
+
+    this.bathyControlElem = document.createElement('div');
+    this.bathyControlElem.className = 'layer-toggle';
+    this.bathyControlLabel = document.createElement('label');
+    this.bathyControl = document.createElement('input');
+    this.bathyControl.setAttribute('type', 'checkbox');
+    this.bathyControl.setAttribute('checked', 'checked');
+    this.bathyControlLabel.appendChild(this.bathyControl);
+    this.bathyControlLabelSpan = document.createElement('span');
+    this.bathyControlLabel.appendChild(this.bathyControlLabelSpan);
+    this.bathyControlLabelSpan.appendChild(document.createTextNode('Bathymetry'));
+    this.bathyControlElem.appendChild(this.bathyControlLabel);
+    const bathyControlChanged = (evt) => {
+      if (this.bathyControl.checked) {
+        this.layer_bag_hillshade.setVisible(true);
+      } else {
+        this.layer_bag_hillshade.setVisible(false);
+      }
+    };
+    this.bathyControl.addEventListener('change', bathyControlChanged);
+    bathyControlChanged();
+    this.menu_inner.appendChild(this.bathyControlElem);
   }
 
   initTileScheme() {
