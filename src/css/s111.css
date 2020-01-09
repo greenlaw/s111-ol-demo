@@ -183,3 +183,13 @@
 .pagination .page-item .page-link {
   cursor: pointer;
 }
+
+.pagination .page-item.active .page-link {
+  background-color: rgb(34, 87, 171);
+  border-color: rgb(34, 87, 171);
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: rgb(200,200,200);
+  border-color: rgb(200,200,200);
+}
