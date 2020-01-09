@@ -174,10 +174,9 @@
 .popup_table tr:hover {background-color: #ddd;}
 
 .popup_table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding: 12px;
   text-align: left;
-  background-color: #4CAF50;
+  background-color: rgb(34, 87, 171);
   color: white;
 }
 
