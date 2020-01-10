@@ -163,22 +163,26 @@ export default class {
   }
 
   initMap() {
-    this.basemapSourceStamen = new XYZSource({
-      url: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg'
-    });
+    // this.basemapSourceStamen = new XYZSource({
+    //   url: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg'
+    // });
 
-    this.basemapSourceOSM = new OSMSource();
+    // this.basemapSourceOSM = new OSMSource();
 
-    this.basemapSourceESRISatellite = new ArcGISRestTileSource({
-      url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
-    });
+    // this.basemapSourceESRISatellite = new ArcGISRestTileSource({
+    //   url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
+    // });
 
-    this.basemapSourceESRITopo = new ArcGISRestTileSource({
-      url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer'
+    // this.basemapSourceESRITopo = new ArcGISRestTileSource({
+    //   url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer'
+    // });
+
+    this.basemapSourceESRIDarkGray = new ArcGISRestTileSource({
+      url: 'https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer'
     });
 
     this.basemapLayer = new TileLayer({
-      source: this.basemapSourceESRISatellite
+      source: this.basemapSourceESRIDarkGray
     });
 
     this.scaleLine = new ScaleLine();
@@ -404,14 +408,10 @@ export default class {
     this.menu_inner = document.createElement('div');
     this.menu_inner.className = 'menu-inner';
 
-    this.initBasemapControl();
+    // this.initBasemapControl();
     this.initRegions();
-    this.initENC();
-    this.initBathy();
-    this.initS104();
-    this.initS111();
-    this.initTileScheme();
-    this.initHighlightLayer();
+    this.initLayers();
+    this.initLayerTogglers();
     this.initAnimationControl();
 
     // Trigger layer update
@@ -419,6 +419,23 @@ export default class {
 
     this.menu_outer.appendChild(this.menu_inner);
     document.getElementById('map-container').appendChild(this.menu_outer);
+  }
+
+  initLayers() {
+    this.initENC();
+    this.initBathy();
+    this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
+    this.initTileScheme();
+    this.initHighlightLayer();
+  }
+
+  initLayerTogglers() {
+    this.initTileSchemeToggler();
+    this.initENCToggler();
+    this.initBathyToggler();
+    this.initS111Toggler();
+    this.initS104Toggler();
+    this.initS412Toggler();
   }
 
   initBathy() {
@@ -448,7 +465,9 @@ export default class {
       source: this.source_bag_hillshade
     });
     this.map.addLayer(this.layer_bag_hillshade);
+  }
 
+  initBathyToggler() {
     this.bathyControlElem = document.createElement('div');
     this.bathyControlElem.className = 'layer-toggle';
     this.bathyControlLabel = document.createElement('label');
@@ -460,15 +479,15 @@ export default class {
     this.bathyControlLabel.appendChild(this.bathyControlLabelSpan);
     this.bathyControlLabelSpan.appendChild(document.createTextNode('Bathymetry (S-102)'));
     this.bathyControlElem.appendChild(this.bathyControlLabel);
-    const bathyControlChanged = (evt) => {
+    this.bathyControlChanged = (evt) => {
       if (this.bathyControl.checked) {
         this.layer_bag_hillshade.setVisible(true);
       } else {
         this.layer_bag_hillshade.setVisible(false);
       }
     };
-    this.bathyControl.addEventListener('change', bathyControlChanged);
-    bathyControlChanged();
+    this.bathyControl.addEventListener('change', this.bathyControlChanged);
+    this.bathyControlChanged();
     this.menu_inner.appendChild(this.bathyControlElem);
   }
 
@@ -485,7 +504,9 @@ export default class {
       source: this.source_tilescheme
     });
     this.map.addLayer(this.layer_tilescheme);
+  }
 
+  initTileSchemeToggler() {
     this.tileControlElem = document.createElement('div');
     this.tileControlElem.className = 'layer-toggle';
     this.tileControlLabel = document.createElement('label');
@@ -495,17 +516,17 @@ export default class {
     this.tileControlLabel.appendChild(this.tileControl);
     this.tileControlLabelSpan = document.createElement('span');
     this.tileControlLabel.appendChild(this.tileControlLabelSpan);
-    this.tileControlLabelSpan.appendChild(document.createTextNode('ENC Tile Scheme'));
+    this.tileControlLabelSpan.appendChild(document.createTextNode('Nautical Product Tile Scheme'));
     this.tileControlElem.appendChild(this.tileControlLabel);
-    const tileControlChanged = (evt) => {
+    this.tileControlChanged = (evt) => {
       if (this.tileControl.checked) {
         this.layer_tilescheme.setVisible(true);
       } else {
         this.layer_tilescheme.setVisible(false);
       }
     };
-    this.tileControl.addEventListener('change', tileControlChanged);
-    tileControlChanged();
+    this.tileControl.addEventListener('change', this.tileControlChanged);
+    this.tileControlChanged();
     this.menu_inner.appendChild(this.tileControlElem);
   }
 
@@ -739,7 +760,9 @@ export default class {
       visible: false
     });
     this.map.addLayer(this.layer_enc);
+  }
 
+  initENCToggler() {
     this.encControlElem = document.createElement('div');
     this.encControlElem.className = 'layer-toggle';
     this.encControlLabel = document.createElement('label');
@@ -749,18 +772,74 @@ export default class {
     this.encControlLabel.appendChild(this.encControl);
     this.encControlLabelSpan = document.createElement('span');
     this.encControlLabel.appendChild(this.encControlLabelSpan);
-    this.encControlLabelSpan.appendChild(document.createTextNode('Electronic Charts (S-57/S-101)'));
+    this.encControlLabelSpan.appendChild(document.createTextNode('Electronic Navigational Charts'));
     this.encControlElem.appendChild(this.encControlLabel);
-    const encControlChanged = (evt) => {
+    this.encControlChanged = (evt) => {
       if (this.encControl.checked) {
         this.layer_enc.setVisible(true);
       } else {
         this.layer_enc.setVisible(false);
       }
     };
-    this.encControl.addEventListener('change', encControlChanged);
-    encControlChanged();
+    this.encControl.addEventListener('change', this.encControlChanged);
+    this.encControlChanged();
     this.menu_inner.appendChild(this.encControlElem);
+  }
+
+  initS104Toggler() {
+    this.s104ControlElem = document.createElement('div');
+    this.s104ControlElem.className = 'layer-toggle layer-disabled';
+    this.s104ControlLabel = document.createElement('label');
+    this.s104Control = document.createElement('input');
+    this.s104Control.setAttribute('type', 'checkbox');
+    this.s104Control.setAttribute('disabled', 'disabled');
+    // this.s104Control.setAttribute('checked', 'checked');
+    this.s104ControlLabel.appendChild(this.s104Control);
+    this.s104ControlLabelSpan = document.createElement('span');
+    this.s104ControlLabel.appendChild(this.s104ControlLabelSpan);
+    this.s104ControlLabelSpan.appendChild(document.createTextNode('Water Levels (S-104)'));
+    this.s104ControlElem.appendChild(this.s104ControlLabel);
+    this.menu_inner.appendChild(this.s104ControlElem);
+  }
+
+  initS412Toggler() {
+    this.s412ControlElem = document.createElement('div');
+    this.s412ControlElem.className = 'layer-toggle layer-disabled';
+    this.s412ControlLabel = document.createElement('label');
+    this.s412Control = document.createElement('input');
+    this.s412Control.setAttribute('type', 'checkbox');
+    this.s412Control.setAttribute('disabled', 'disabled');
+    // this.s412Control.setAttribute('checked', 'checked');
+    this.s412ControlLabel.appendChild(this.s412Control);
+    this.s412ControlLabelSpan = document.createElement('span');
+    this.s412ControlLabel.appendChild(this.s412ControlLabelSpan);
+    this.s412ControlLabelSpan.appendChild(document.createTextNode('Weather and Wave Hazards (S-412)'));
+    this.s412ControlElem.appendChild(this.s412ControlLabel);
+    this.menu_inner.appendChild(this.s412ControlElem);
+  }
+
+  initS111Toggler() {
+    this.ofsControlElem = document.createElement('div');
+    this.ofsControlElem.className = 'layer-toggle';
+    this.ofsControlLabel = document.createElement('label');
+    this.ofsControl = document.createElement('input');
+    this.ofsControl.setAttribute('type', 'checkbox');
+    this.ofsControl.setAttribute('checked', 'checked');
+    this.ofsControlLabel.appendChild(this.ofsControl);
+    this.ofsControlLabelSpan = document.createElement('span');
+    this.ofsControlLabel.appendChild(this.ofsControlLabelSpan);
+    this.ofsControlLabelSpan.appendChild(document.createTextNode('Surface Currents (S-111)'));
+    this.ofsControlElem.appendChild(this.ofsControlLabel);
+    this.ofsControlChanged = (evt) => {
+      if (this.ofsControl.checked) {
+        this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
+      } else {
+        this.updateOFS(null);
+      }
+    };
+    this.ofsControl.addEventListener('change', this.ofsControlChanged);
+    this.ofsControlChanged();
+    this.menu_inner.appendChild(this.ofsControlElem);
   }
 
   initBasemapControl() {
@@ -768,8 +847,8 @@ export default class {
     this.basemapControl = document.createElement('select');
     const basemaps = {
       'esri-sat': {
-        'label': 'ESRI Satellite Imagery',
-        'source': this.basemapSourceESRISatellite
+        'label': 'Dark Gray Canvas',
+        'source': this.basemapSourceESRIDarkGray
       }, 'stamen': {
         'label': 'Stamen',
         'source': this.basemapSourceStamen
@@ -933,45 +1012,5 @@ export default class {
 
     this.regionControlElem.appendChild(this.regionControl);
     this.menu_inner.appendChild(this.regionControlElem);
-  }
-
-  initS104() {
-    this.s104ControlElem = document.createElement('div');
-    this.s104ControlElem.className = 'layer-toggle layer-disabled';
-    this.s104ControlLabel = document.createElement('label');
-    this.s104Control = document.createElement('input');
-    this.s104Control.setAttribute('type', 'checkbox');
-    this.s104Control.setAttribute('disabled', 'disabled');
-    // this.s104Control.setAttribute('checked', 'checked');
-    this.s104ControlLabel.appendChild(this.s104Control);
-    this.s104ControlLabelSpan = document.createElement('span');
-    this.s104ControlLabel.appendChild(this.s104ControlLabelSpan);
-    this.s104ControlLabelSpan.appendChild(document.createTextNode('Water Levels (S-104)'));
-    this.s104ControlElem.appendChild(this.s104ControlLabel);
-    this.menu_inner.appendChild(this.s104ControlElem);
-  }
-
-  initS111() {
-    this.ofsControlElem = document.createElement('div');
-    this.ofsControlElem.className = 'layer-toggle';
-    this.ofsControlLabel = document.createElement('label');
-    this.ofsControl = document.createElement('input');
-    this.ofsControl.setAttribute('type', 'checkbox');
-    this.ofsControl.setAttribute('checked', 'checked');
-    this.ofsControlLabel.appendChild(this.ofsControl);
-    this.ofsControlLabelSpan = document.createElement('span');
-    this.ofsControlLabel.appendChild(this.ofsControlLabelSpan);
-    this.ofsControlLabelSpan.appendChild(document.createTextNode('Surface Currents (S-111)'));
-    this.ofsControlElem.appendChild(this.ofsControlLabel);
-    this.ofsControlChanged = (evt) => {
-      if (this.ofsControl.checked) {
-        this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
-      } else {
-        this.updateOFS(null);
-      }
-    };
-    this.ofsControl.addEventListener('change', this.ofsControlChanged);
-    this.ofsControlChanged();
-    this.menu_inner.appendChild(this.ofsControlElem);
   }
 }
