@@ -169,12 +169,16 @@ export default class {
 
     // this.basemapSourceOSM = new OSMSource();
 
-    // this.basemapSourceESRISatellite = new ArcGISRestTileSource({
-    //   url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
-    // });
+    this.basemapSourceESRISatellite = new ArcGISRestTileSource({
+      url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
+    });
+
+    this.basemapSourceESRIOcean = new ArcGISRestTileSource({
+      url: 'https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer'
+    })
 
     // this.basemapSourceESRITopo = new ArcGISRestTileSource({
-    //   url: 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer'
+    //   url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer'
     // });
 
     this.basemapSourceESRIDarkGray = new ArcGISRestTileSource({
@@ -408,7 +412,7 @@ export default class {
     this.menu_inner = document.createElement('div');
     this.menu_inner.className = 'menu-inner';
 
-    // this.initBasemapControl();
+    this.initBasemapControl();
     this.initRegions();
     this.initLayers();
     this.initLayerTogglers();
@@ -846,18 +850,15 @@ export default class {
     this.basemapControlElem = document.createElement('div');
     this.basemapControl = document.createElement('select');
     const basemaps = {
-      'esri-sat': {
+      'dark-gray': {
         'label': 'Dark Gray Canvas',
         'source': this.basemapSourceESRIDarkGray
-      }, 'stamen': {
-        'label': 'Stamen',
-        'source': this.basemapSourceStamen
-      }, 'osm': {
-        'label': 'OpenStreetMap',
-        'source': this.basemapSourceOSM
-      }, 'esri-topo': {
-        'label': 'ESRI Topographic',
-        'source': this.basemapSourceESRITopo
+      }, 'satellite': {
+        'label': 'Satellite',
+        'source': this.basemapSourceESRISatellite
+      }, 'ocean': {
+        'label': 'Ocean',
+        'source': this.basemapSourceESRIOcean
       }
     };
     Object.entries(basemaps).forEach(([id, bm]) => {
