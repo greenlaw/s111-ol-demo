@@ -812,12 +812,12 @@ export default class {
         clearInterval(this.animation_interval);
       }
       if (this.playing) {
-        this.playPauseButton.className = 'fa fa-2x fa-pause';
+        this.playPauseButton.className = 'fa fa-pause';
         this.animation_interval = setInterval(() => {
           this.ofs_play();
         }, 2000);
       } else {
-        this.playPauseButton.className = 'fa fa-2x fa-play';
+        this.playPauseButton.className = 'fa fa-play';
       }
     };
 
