@@ -20,6 +20,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import ImageLayer from 'ol/layer/Image';
 import ImageWMSSource from 'ol/source/ImageWMS';
+import ImageArcGISRest from 'ol/source/ImageArcGISRest';
 import OSMSource from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS';
 import TileLayer from 'ol/layer/Tile';
@@ -443,6 +444,37 @@ export default class {
   }
 
   initBathy() {
+    this.source_nbs_la = new ImageArcGISRest({
+      url: 'https://devgis.charttools.noaa.gov/arcgis/rest/services/NBS/LA_LongBeach_NBStiles/ImageServer',
+      params: {
+        FORMAT: 'jpgpng',
+        compressionQuality: 75,
+        renderingRule: JSON.stringify({"rasterFunction":"Colormap","rasterFunctionArguments":{"ColorrampName":"Purple to Green Diverging, Bright","Raster":{"rasterFunction":"Stretch","rasterFunctionArguments":{"StretchType":5,"Statistics":[[-44.400001525878906,3.794548988342285,-20.139903407513135,7.109085656599334]],"DRA":false,"UseGamma":true,"Gamma":[1],"ComputeGamma":false},"variableName":"Raster","outputPixelType":"U8"}},"variableName":"Raster"})
+      },
+      ratio: 1
+    });
+    this.layer_nbs_la = new ImageLayer({
+      source: this.source_nbs_la
+    });
+    this.map.addLayer(this.layer_nbs_la);
+
+    this.source_nbs_ny = new ImageArcGISRest({
+      // url: 'https://devgis.charttools.noaa.gov/arcgis/rest/services/NBS/LA_LongBeach_NBStiles/ImageServer',
+      url: 'https://devgis.charttools.noaa.gov/arcgis/rest/services/NBS/testAreaNBS/ImageServer',
+      params: {
+        FORMAT: 'jpgpng',
+        compressionQuality: 75,
+        renderingRule: JSON.stringify({"rasterFunction":"none"})
+      },
+      ratio: 1
+    });
+    this.layer_nbs_ny = new ImageLayer({
+      source: this.source_nbs_ny
+    });
+    this.map.addLayer(this.layer_nbs_ny);
+  }
+
+  initBathyNCEI() {
     const epsg3857 = getProjection('EPSG:3857');
     const size = getWidth(epsg3857.getExtent()) / 256;
     const resolutions = new Array(19);
@@ -485,9 +517,11 @@ export default class {
     this.bathyControlElem.appendChild(this.bathyControlLabel);
     this.bathyControlChanged = (evt) => {
       if (this.bathyControl.checked) {
-        this.layer_bag_hillshade.setVisible(true);
+        this.layer_nbs_la.setVisible(true);
+        this.layer_nbs_ny.setVisible(true);
       } else {
-        this.layer_bag_hillshade.setVisible(false);
+        this.layer_nbs_ny.setVisible(false);
+        this.layer_nbs_la.setVisible(false);
       }
     };
     this.bathyControl.addEventListener('change', this.bathyControlChanged);
