@@ -387,7 +387,7 @@ export default class {
     </tr>
     <tr>
        <td>Get Data</td>
-       <td><a href=''>S-102 HDF-5 File</a></td>
+       <td><a href='https://ocs-pn-dev-public-data.s3.amazonaws.com/index.html'>S-102 HDF-5 Files</a></td>
     </tr>
   </tbody>
 </table>`;
@@ -444,7 +444,7 @@ export default class {
     </tr>
     <tr>
        <td>Get Data</td>
-       <td><a href=''>Latest Forecast File (S-111 HDF-5)</a></td>
+       <td><a href='https://ocs-pn-dev-public-data.s3.amazonaws.com/index.html'>S-111 HDF-5 Files</a></td>
     </tr>
   </tbody>
 </table>`;
