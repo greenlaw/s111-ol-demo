@@ -70,89 +70,88 @@ const REGIONS = {
 const S111_MODELS = {
   'chesapeake': {
     'source': new ImageWMSSource({
-      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      url: '/geoserver/obs/wms',
       params: {
-        'layers': 's100ofs_Geo:pn_cbofs',
+        'layers': 'cbofs_sfc_currents',
         'format': 'image/png8',
         'transparent': 'true'
       },
       ratio: 1
     }),
-    'start_time': new Date('2019-12-31T19:00:00.000Z'),
-    'end_time': new Date('2020-01-02T18:00:00.000Z'),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-05T12:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
-  // 'delaware': {
+  'delaware': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'dbofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-05T12:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+  },
+  // 'gomaine': {
   //   'source': new ImageWMSSource({
-  //     url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+  //     url: '/geoserver/obs/wms',
   //     params: {
-  //       'layers': 's100ofs_Geo:dbofs',
+  //       'layers': 'gomofs_sfc_currents',
   //       'format': 'image/png8',
   //       'transparent': 'true'
   //     },
   //     ratio: 1
   //   }),
-  //   'start_time': new Date('2018-07-13T13:00:00.000Z'),
-  //   'end_time': new Date('2018-07-15T12:00:00.000Z'),
-  //   'time_step': 1 * 6 * 60 * 1000 // 1 hour
+  //   'start_time': new Date('2020-04-03T13:00:00.000Z'),
+  //   'end_time': new Date('2020-04-05T12:00:00.000Z'),
+  //   'time_step': 3 * 60 * 60 * 1000 // 3 hours
   // },
-  'gomaine': {
-    'source': new ImageWMSSource({
-      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
-      params: {
-        'layers': 's100ofs_Geo:pn_gomofs',
-        'format': 'image/png8',
-        'transparent': 'true'
-      },
-      ratio: 1
-    }),
-    'start_time': new Date('2019-12-31T21:00:00.000Z'),
-    'end_time': new Date('2020-01-03T18:00:00.000Z'),
-    'time_step': 3 * 60 * 60 * 1000 // 3 hours
-  },
   'gomex': {
     'source': new ImageWMSSource({
-      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      url: '/geoserver/obs/wms',
       params: {
-        'layers': 's100ofs_Geo:pn_ngofs',
+        'layers': 'ngofs_sfc_currents',
         'format': 'image/png8',
         'transparent': 'true'
       },
       ratio: 1
     }),
-    'start_time': new Date('2019-12-31T16:00:00.000Z'),
-    'end_time': new Date('2020-01-02T15:00:00.000Z'),
-    'time_step': 1 * 60 * 60 * 1000 // 1 hour
+    'start_time': new Date('2020-04-03T10:00:07.000Z'),
+    'end_time': new Date('2020-04-05T15:00:00.000Z'),
+    'time_step': 3 * 60 * 60 * 1000 // 1 hour
   },
   'ny': {
     'source': new ImageWMSSource({
-      url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
+      url: '/geoserver/obs/wms',
       params: {
-        'layers': 's100ofs_Geo:pn_nyofs',
+        'layers': 'nyofs_sfc_currents',
         'format': 'image/png8',
         'transparent': 'true'
       },
       ratio: 1
     }),
-    'start_time': new Date('2019-12-31T18:00:00.000Z'),
-    'end_time': new Date('2020-01-02T23:00:00.000Z'),
+    'start_time': new Date('2020-04-03T12:00:00.000Z'),
+    'end_time': new Date('2020-04-05T17:00:14.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
+  },
+  'tampa': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'tbofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-05T12:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   }
-  // ,
-  // 'tampa': {
-  //   'source': new ImageWMSSource({
-  //     url: 'https://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
-  //     params: {
-  //       'layers': 's100ofs_Geo:tbofs',
-  //       'format': 'image/png8',
-  //       'transparent': 'true'
-  //     },
-  //     ratio: 1
-  //   }),
-  //   'start_time': new Date('2018-07-11T13:00:00.000Z'),
-  //   'end_time': new Date('2018-07-13T12:00:00.000Z'),
-  //   'time_step': 1 * 60 * 60 * 1000 // 1 hour
-  // }
 };
 
 export default class {
@@ -248,11 +247,11 @@ export default class {
     </tr>
     <tr>
        <td>Cell Name</td>
-       <td>${attributes.CellName}</td>
+       <td>${attributes.Cell_Name}</td>
     </tr>
     <tr>
        <td>Band Number</td>
-       <td>${attributes.Band_Num}</td>
+       <td>4</td>
     </tr>
     <tr>
        <td>Get Data</td>
@@ -267,13 +266,13 @@ export default class {
   <thead>
     <tr>
       <th>S-100 Product</th>
-      <th>${attributes.S100_Prod}</th>
+      <th>S-111</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Forecast Model System</td>
-      <td>${attributes.OFS}</td>
+      <td>CBOFS</td>
     </tr>
     <tr>
       <td>Agency</td>
@@ -281,35 +280,35 @@ export default class {
     </tr>
     <tr>
       <td>Forecast Cycles</td>
-      <td>${attributes.Cycles}</td>
+      <td>00, 06, 12, 18</td>
     </tr>
     <tr>
        <td>Forecast Horizon</td>
-       <td>${attributes.Projection}</td>
+       <td>48 Hours</td>
     </tr>
     <tr>
        <td>Product Type</td>
-       <td>${attributes.Prod_Type}</td>
+       <td>Model Guidance</td>
     </tr>
       <tr>
        <td>Variable</td>
-       <td>${attributes.Variable}</td>
+       <td>Surface Currents</td>
     </tr>
      <tr>
        <td>Depth</td>
-       <td>${attributes.Depth}</td>
+       <td>4.5m</td>
     </tr>
     <tr>
        <td>Spatial Resolution</td>
-       <td>${attributes.SpatialRes}</td>
+       <td>500m</td>
     </tr>
     <tr>
        <td>Cell Name</td>
-       <td>${attributes.CellName}</td>
+       <td>${attributes.Cell_Name}</td>
     </tr>
     <tr>
        <td>Band Number</td>
-       <td>${attributes.Band_Num}</td>
+       <td>4</td>
     </tr>
     <tr>
        <td>Get Data</td>
@@ -331,27 +330,43 @@ export default class {
 
     this.map.on("singleclick", (evt) => {
       //const lonLat = toLonLat(evt.coordinate);
-      let queryURL = this.source_tilescheme.getGetFeatureInfoUrl(
-        evt.coordinate,
-        this.map.getView().getResolution(),
-        'EPSG:3857',
-        {'INFO_FORMAT': 'application/json'}
-      );
-      // Workaround issue with GeoServer 2.12 WMS 1.3.0 GetFeatureInfo requests
-      queryURL = queryURL.replace("VERSION=1.3.0","VERSION=1.1.1");
-      queryURL = queryURL.replace("I=", "X=");
-      queryURL = queryURL.replace("J=", "Y=");
-      queryURL = queryURL.replace("CRS=", "SRS=");
+      // let queryURL = this.source_tilescheme.getGetFeatureInfoUrl(
+      //   evt.coordinate,
+      //   this.map.getView().getResolution(),
+      //   'EPSG:3857',
+      //   {'INFO_FORMAT': 'application/json'}
+      // );
+      // // Workaround issue with GeoServer 2.12 WMS 1.3.0 GetFeatureInfo requests
+      // queryURL = queryURL.replace("VERSION=1.3.0","VERSION=1.1.1");
+      // queryURL = queryURL.replace("I=", "X=");
+      // queryURL = queryURL.replace("J=", "Y=");
+      // queryURL = queryURL.replace("CRS=", "SRS=");
+      
+      //console.log("clicked coord:", evt.coordinate);
+      let queryString = "f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry="
+          // + JSON.stringify(geometryParams)
+          + evt.coordinate[0] + "," + evt.coordinate[1]
+          + "&geometryType=esriGeometryPoint&inSR=102100&outFields=OBJECTID,Cell_Name,Scale,Title,Branch,Coast_Guard,Status,Fiscal_Year_Complete&outSR=102100"
+          // + "&quantizationParameters="
+          // + JSON.stringify(quantizationParams);
+      let queryURL = "https://gis.charttools.noaa.gov/arcgis/rest/services/MarineChart_Services/Status_New_NOAA_ENCs/MapServer/2/query?" + queryString;
       
       fetch(queryURL)
         .then(response => response.json())
         .then((data) => {
-          if (data.features && data.features.length > 0 && data.features[0].properties) {
+          //console.log(data);
+          if (data.features && data.features.length > 0 && data.features[0].attributes) {
             this.source_highlight.clear();
-            const geojsonFeature = new GeoJSON().readFeature(data.features[0]);
+            const feature = data.features[0];
+            // Monkey patch ESRI feature into GeoJSON feature object
+            feature.type = "Feature"
+            feature.properties = feature.attributes;
+            feature.geometry.type = "Polygon"
+            feature.geometry.coordinates = feature.geometry.rings;
+            const geojsonFeature = new GeoJSON().readFeature(feature);
             this.source_highlight.addFeature(geojsonFeature);
 
-            this.identifyAttributes = data.features[0].properties;
+            this.identifyAttributes = feature.attributes;
 
             const contentElem = document.getElementById("query-popup-content");
             
@@ -395,6 +410,55 @@ export default class {
             contentElem.appendChild(this.popupTableContainer);
             this.clickOverlay.setPosition(evt.coordinate);
           }
+//           if (data.features && data.features.length > 0 && data.features[0].properties) {
+//             this.source_highlight.clear();
+//             const geojsonFeature = new GeoJSON().readFeature(data.features[0]);
+//             this.source_highlight.addFeature(geojsonFeature);
+
+//             this.identifyAttributes = data.features[0].properties;
+
+//             const contentElem = document.getElementById("query-popup-content");
+            
+//             if (this.navElem) {
+//               this.navElem.remove();
+//               this.navElem = null;
+//             }
+
+//             this.navElem = document.createElement('div');
+//             this.navElem.innerHTML = `<nav aria-label="S100 Products">
+//   <ul class="pagination">
+//     <li class="page-item" id="popup-nav-item-s102"><a class="page-link" id="popup-nav-link-s102">S-102</a></li>
+//     <li class="page-item disabled" id="popup-nav-item-s104"><a class="page-link" id="popup-nav-link-s104" tabindex="-1">S-104</a></li>
+//     <li class="page-item active" id="popup-nav-item-s111"><a class="page-link" id="popup-nav-link-s111">S-111</a></li>
+//   </ul>
+// </nav>`;
+
+//             contentElem.appendChild(this.navElem);
+
+//             const popupButtonS102 = document.getElementById("popup-nav-link-s102");
+//             const popupItemS102 = document.getElementById("popup-nav-item-s102");
+//             popupButtonS102.onclick = (evt) => {
+//               popupItemS111.className = "page-item";
+//               popupItemS102.className = "page-item active";
+//               this.showAttributeTableS102(this.popupTableContainer, this.identifyAttributes);
+//             };
+//             const popupButtonS111 = document.getElementById("popup-nav-link-s111");
+//             const popupItemS111 = document.getElementById("popup-nav-item-s111");
+//             popupButtonS111.onclick = (evt) => {
+//               popupItemS102.className = "page-item";
+//               popupItemS111.className = "page-item active";
+//               this.showAttributeTableS111(this.popupTableContainer, this.identifyAttributes);
+//             };
+
+//             if (this.popupTableContainer) {
+//               this.popupTableContainer.remove();
+//               this.popupTableContainer = null;
+//             }
+//             this.popupTableContainer = document.createElement('div');
+//             this.showAttributeTableS111(this.popupTableContainer, this.identifyAttributes);
+//             contentElem.appendChild(this.popupTableContainer);
+//             this.clickOverlay.setPosition(evt.coordinate);
+//           }
         });
     });
 
@@ -430,7 +494,7 @@ export default class {
     this.initENC();
     this.initBathy();
     this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
-    this.initTileScheme();
+    this.initTileSchemeBand4();
     this.initHighlightLayer();
   }
 
@@ -529,6 +593,22 @@ export default class {
     this.menu_inner.appendChild(this.bathyControlElem);
   }
 
+  initTileSchemeBand4() {
+    this.source_tilescheme_band4 = new ImageArcGISRest({
+      url: 'https://gis.charttools.noaa.gov/arcgis/rest/services/MarineChart_Services/Status_New_NOAA_ENCs/MapServer',
+      params: {
+        FORMAT: 'png8',
+        compressionQuality: 75,
+        LAYERS: 'show:2'
+      },
+      ratio: 1
+    });
+    this.layer_tilescheme_band4 = new ImageLayer({
+      source: this.source_tilescheme_band4
+    });
+    this.map.addLayer(this.layer_tilescheme_band4);
+  }
+
   initTileScheme() {
     this.source_tilescheme = new TileWMS({
       url: 'http://nimbostratus.ccom.nh/geoserver/s100ofs_Geo/wms',
@@ -558,9 +638,9 @@ export default class {
     this.tileControlElem.appendChild(this.tileControlLabel);
     this.tileControlChanged = (evt) => {
       if (this.tileControl.checked) {
-        this.layer_tilescheme.setVisible(true);
+        this.layer_tilescheme_band4.setVisible(true);
       } else {
-        this.layer_tilescheme.setVisible(false);
+        this.layer_tilescheme_band4.setVisible(false);
       }
     };
     this.tileControl.addEventListener('change', this.tileControlChanged);
