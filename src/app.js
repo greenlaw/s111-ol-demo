@@ -626,8 +626,8 @@ export default class {
   initLayers() {
     this.initENC();
     this.initBathy();
-    this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
     this.initTileSchemeBand4();
+    this.updateOFS(this.regionControl.options[this.regionControl.selectedIndex].value);
     this.initHighlightLayer();
   }
 
