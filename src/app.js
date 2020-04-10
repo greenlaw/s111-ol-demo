@@ -39,32 +39,66 @@ const REGIONS = {
     'center': [-76.087, 37.6],
     'zoom': 9
   },
-  // 'delaware': {
-  //   'label': 'Delaware Bay',
-  //   'center': [-74.574, 38.75],
-  //   'zoom': 10
-  // },
-  'gomaine': {
-    'label': 'Gulf of Maine',
-    'center': [-69.833, 42.223],
-    'zoom': 8
+  'delaware': {
+    'label': 'Delaware Bay',
+    'center': [-74.957, 38.862],
+    'zoom': 10
   },
+  // 'gomaine': {
+  //   'label': 'Gulf of Maine',
+  //   'center': [-69.833, 42.223],
+  //   'zoom': 8
+  // },
   'gomex': {
     'label': 'Northern Gulf of Mexico',
     'center': [-90.925, 28.960],
     'zoom': 8
   },
+  'gomex_ne': {
+    'label': 'Northeast Gulf of Mexico',
+    'center': [-88.617, 30.229],
+    'zoom': 10
+  },
+  'gomex_nw': {
+    'label': 'Northwest Gulf of Mexico',
+    'center': [-94.356, 29.200],
+    'zoom': 9
+  },
+  'lake_erie': {
+    'label': 'Lake Erie',
+    'center': [-81.019, 42.281],
+    'zoom': 9
+  },
+  'lake_mich_huron': {
+    'label': 'Lake Michigan & Huron',
+    'center': [-84.512, 44.190],
+    'zoom': 8
+  },
+  'lake_ontario': {
+    'label': 'Lake Ontario',
+    'center': [-77.750, 43.658],
+    'zoom': 9
+  },
+  'lake_superior': {
+    'label': 'Lake Superior',
+    'center': [-87.539, 47.702],
+    'zoom': 8
+  },
   'ny': {
     'label': 'New York/New Jersey Harbor',
     'center': [-74.009, 40.551],
+    'zoom': 12
+  },
+  'san_fran': {
+    'label': 'San Francisco Bay',
+    'center': [-122.489, 37.808],
+    'zoom': 11
+  },
+  'tampa': {
+    'label': 'Tampa Bay',
+    'center': [-82.773, 27.557],
     'zoom': 11
   }
-  // ,
-  // 'tampa': {
-  //   'label': 'Tampa Bay',
-  //   'center': [-82.773, 27.557],
-  //   'zoom': 10
-  // }
 };
 
 const S111_MODELS = {
@@ -120,9 +154,93 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T10:00:07.000Z'),
+    'start_time': new Date('2020-04-03T10:00:00.000Z'),
     'end_time': new Date('2020-04-05T15:00:00.000Z'),
     'time_step': 3 * 60 * 60 * 1000 // 1 hour
+  },
+  'gomex_ne': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'negofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T10:00:00.000Z'),
+    'end_time': new Date('2020-04-05T09:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
+  },
+  'gomex_nw': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'nwgofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T10:00:00.000Z'),
+    'end_time': new Date('2020-04-05T09:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
+  },
+  'lake_erie': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'leofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-08T12:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+  },
+  'lake_mich_huron': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'lmhofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-08T12:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+  },
+  'lake_ontario': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'loofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-06T00:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+  },
+  'lake_superior': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'lsofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T13:00:00.000Z'),
+    'end_time': new Date('2020-04-06T00:00:00.000Z'),
+    'time_step': 1 * 6 * 60 * 1000 // 1 hour
   },
   'ny': {
     'source': new ImageWMSSource({
@@ -135,7 +253,21 @@ const S111_MODELS = {
       ratio: 1
     }),
     'start_time': new Date('2020-04-03T12:00:00.000Z'),
-    'end_time': new Date('2020-04-05T17:00:14.000Z'),
+    'end_time': new Date('2020-04-05T17:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
+  },
+  'san_fran': {
+    'source': new ImageWMSSource({
+      url: '/geoserver/obs/wms',
+      params: {
+        'layers': 'sfbofs_sfc_currents',
+        'format': 'image/png8',
+        'transparent': 'true'
+      },
+      ratio: 1
+    }),
+    'start_time': new Date('2020-04-03T10:00:00.000Z'),
+    'end_time': new Date('2020-04-05T09:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'tampa': {
@@ -329,7 +461,8 @@ export default class {
     this.map.addOverlay(this.clickOverlay);
 
     this.map.on("singleclick", (evt) => {
-      //const lonLat = toLonLat(evt.coordinate);
+      // const lonLat = toLonLat(evt.coordinate);
+      // console.log(lonLat);
       // let queryURL = this.source_tilescheme.getGetFeatureInfoUrl(
       //   evt.coordinate,
       //   this.map.getView().getResolution(),
