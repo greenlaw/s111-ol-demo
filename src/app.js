@@ -104,7 +104,7 @@ const REGIONS = {
 const S111_MODELS = {
   'chesapeake': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'cbofs_sfc_currents',
         'format': 'image/png8',
@@ -118,7 +118,7 @@ const S111_MODELS = {
   },
   'delaware': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'dbofs_sfc_currents',
         'format': 'image/png8',
@@ -132,7 +132,7 @@ const S111_MODELS = {
   },
   // 'gomaine': {
   //   'source': new ImageWMSSource({
-  //     url: '/geoserver/obs/wms',
+  //     url: '/geoserver/ofs/wms',
   //     params: {
   //       'layers': 'gomofs_sfc_currents',
   //       'format': 'image/png8',
@@ -146,7 +146,7 @@ const S111_MODELS = {
   // },
   'gomex': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'ngofs_sfc_currents',
         'format': 'image/png8',
@@ -160,7 +160,7 @@ const S111_MODELS = {
   },
   'gomex_ne': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'negofs_sfc_currents',
         'format': 'image/png8',
@@ -174,7 +174,7 @@ const S111_MODELS = {
   },
   'gomex_nw': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'nwgofs_sfc_currents',
         'format': 'image/png8',
@@ -188,7 +188,7 @@ const S111_MODELS = {
   },
   'lake_erie': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'leofs_sfc_currents',
         'format': 'image/png8',
@@ -202,7 +202,7 @@ const S111_MODELS = {
   },
   'lake_mich_huron': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'lmhofs_sfc_currents',
         'format': 'image/png8',
@@ -216,7 +216,7 @@ const S111_MODELS = {
   },
   'lake_ontario': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'loofs_sfc_currents',
         'format': 'image/png8',
@@ -230,7 +230,7 @@ const S111_MODELS = {
   },
   'lake_superior': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'lsofs_sfc_currents',
         'format': 'image/png8',
@@ -244,7 +244,7 @@ const S111_MODELS = {
   },
   'ny': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'nyofs_sfc_currents',
         'format': 'image/png8',
@@ -258,7 +258,7 @@ const S111_MODELS = {
   },
   'san_fran': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'sfbofs_sfc_currents',
         'format': 'image/png8',
@@ -272,7 +272,7 @@ const S111_MODELS = {
   },
   'tampa': {
     'source': new ImageWMSSource({
-      url: '/geoserver/obs/wms',
+      url: '/geoserver/ofs/wms',
       params: {
         'layers': 'tbofs_sfc_currents',
         'format': 'image/png8',
