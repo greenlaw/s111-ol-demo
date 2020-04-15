@@ -112,8 +112,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-05T12:00:00.000Z'),
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-16T12:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'delaware': {
@@ -126,9 +126,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-05T12:00:00.000Z'),
-    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-16T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   // 'gomaine': {
   //   'source': new ImageWMSSource({
@@ -154,8 +154,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T10:00:00.000Z'),
-    'end_time': new Date('2020-04-05T15:00:00.000Z'),
+    'start_time': new Date('2020-04-14T16:00:00.000Z'),
+    'end_time': new Date('2020-04-16T21:00:00.000Z'),
     'time_step': 3 * 60 * 60 * 1000 // 1 hour
   },
   'gomex_ne': {
@@ -168,8 +168,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T10:00:00.000Z'),
-    'end_time': new Date('2020-04-05T09:00:00.000Z'),
+    'start_time': new Date('2020-04-14T16:00:00.000Z'),
+    'end_time': new Date('2020-04-16T15:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'gomex_nw': {
@@ -182,8 +182,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T10:00:00.000Z'),
-    'end_time': new Date('2020-04-05T09:00:00.000Z'),
+    'start_time': new Date('2020-04-14T16:00:00.000Z'),
+    'end_time': new Date('2020-04-16T15:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'lake_erie': {
@@ -196,9 +196,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-08T12:00:00.000Z'),
-    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-19T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'lake_mich_huron': {
     'source': new ImageWMSSource({
@@ -210,9 +210,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-08T12:00:00.000Z'),
-    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-19T12:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'lake_ontario': {
     'source': new ImageWMSSource({
@@ -224,9 +224,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-06T00:00:00.000Z'),
-    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-17T00:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'lake_superior': {
     'source': new ImageWMSSource({
@@ -238,9 +238,9 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-06T00:00:00.000Z'),
-    'time_step': 1 * 6 * 60 * 1000 // 1 hour
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-17T00:00:00.000Z'),
+    'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'ny': {
     'source': new ImageWMSSource({
@@ -252,8 +252,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T12:00:00.000Z'),
-    'end_time': new Date('2020-04-05T17:00:00.000Z'),
+    'start_time': new Date('2020-04-14T12:00:00.000Z'),
+    'end_time': new Date('2020-04-16T17:00:14.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'san_fran': {
@@ -266,8 +266,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T10:00:00.000Z'),
-    'end_time': new Date('2020-04-05T09:00:00.000Z'),
+    'start_time': new Date('2020-04-14T16:00:00.000Z'),
+    'end_time': new Date('2020-04-16T15:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   },
   'tampa': {
@@ -280,8 +280,8 @@ const S111_MODELS = {
       },
       ratio: 1
     }),
-    'start_time': new Date('2020-04-03T13:00:00.000Z'),
-    'end_time': new Date('2020-04-05T12:00:00.000Z'),
+    'start_time': new Date('2020-04-14T13:00:00.000Z'),
+    'end_time': new Date('2020-04-16T12:00:00.000Z'),
     'time_step': 1 * 60 * 60 * 1000 // 1 hour
   }
 };
