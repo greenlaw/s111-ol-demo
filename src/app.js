@@ -655,13 +655,12 @@ export default class {
     });
     this.map.addLayer(this.layer_nbs_la);
 
-    this.source_nbs_ny = new ImageArcGISRest({
-      // url: 'https://devgis.charttools.noaa.gov/arcgis/rest/services/NBS/LA_LongBeach_NBStiles/ImageServer',
-      url: 'https://devgis.charttools.noaa.gov/arcgis/rest/services/NBS/testAreaNBS/ImageServer',
+    this.source_nbs_ny = new ImageWMSSource({
+      url: '/geoserver/bathy/wms',
       params: {
-        FORMAT: 'jpgpng',
-        compressionQuality: 75,
-        renderingRule: JSON.stringify({"rasterFunction":"none"})
+        'layers': 'nbs_ny_hillshade,nbs_ny_bathy',
+        'format': 'image/png8',
+        'transparent': 'true'
       },
       ratio: 1
     });
